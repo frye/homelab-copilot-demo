@@ -446,7 +446,9 @@ API (src/HomeLab.Api):
   status. For each device and metric, use only the latest reading
   (by RecordedAt). Ignore older readings that crossed a threshold.
     - Rack temperature >= 28 °C is a warning. At >= 32 °C, produce
-      one critical alert instead of the warning.
+      one critical alert instead of the warning. This rule applies
+      only to the seeded rack temperature sensor (by its stable
+      device id), not to every Temperature reading.
     - CO₂ >= 1000 ppm is a warning.
     - A device whose status is anything other than Healthy, Idle or
       On gets a warning.
@@ -472,10 +474,13 @@ Acknowledgment behavior (decided, don't ask):
 
 Web (src/HomeLab.Web), decided, don't ask:
 
-- The Web app must keep running without the API. If an API base URL
-  is configured, the alerts page calls the API. Otherwise it runs in
-  a clearly labeled standalone demo mode that uses the same shared
-  alert rules and seed data.
+- The Web app must keep running without the API. The API base URL is
+  configured via HomeLabApi:BaseUrl (env var HomeLabApi__BaseUrl).
+  It is optional and unset by default. If set, the alerts page calls
+  the API only. If unset, the page runs in a clearly labeled
+  standalone demo mode that uses the same shared alert rules and
+  seed data. If it is set but not a valid http(s) URL, show a
+  configuration error instead of switching to standalone mode.
 - If the API is configured and a call fails, show an error with a
   retry option. Never fall back to local data silently.
 - Put the shared telemetry models, seed data and alert evaluator in
