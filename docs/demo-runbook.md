@@ -23,10 +23,9 @@ Work through the rows in order. Each row lists the features to call out, the pre
 <table>
 <thead>
 <tr>
-<th>Time &amp; surface</th>
-<th>Topics / features to highlight</th>
-<th>Presenter steps and prompts</th>
-<th>Checkpoint</th>
+<th width="12%">Time &amp; surface</th>
+<th width="68%">Presenter guide: features, steps and prompts</th>
+<th width="20%">Checkpoint</th>
 </tr>
 </thead>
 <tbody>
@@ -35,20 +34,23 @@ Work through the rows in order. Each row lists the features to call out, the pre
 <td><strong>0–8</strong><br>Copilot app<br><em>Orientation</em></td>
 <td>
 
+**Features to highlight**
+
 - Adding a repo as a project; each session gets its own isolated worktree and branch.
 - Repository custom instructions (`.github/copilot-instructions.md`) shape every answer: simulated hardware only, previews only, run tests.
 - Asking questions about the codebase and getting answers that cite files.
 - Previewing the running dashboard next to the chat.
 
-</td>
-<td>
+**Presenter steps**
 
 1. Open the attendee's repo as a project and start a session.
 2. Show the running dashboard at `http://localhost:5072`.
 3. Ask:
 
 ```text
-Explain how the API and web projects fit together. Does the dashboard's Preview button call the API? Can anything here control real hardware?
+Explain how the API and web projects fit together.
+Does the dashboard's Preview button call the API?
+Can anything here control real hardware?
 ```
 
 4. Point out the discovery: the dashboard is static and doesn't call the API yet. That makes a good follow-up task.
@@ -61,20 +63,23 @@ Explain how the API and web projects fit together. Does the dashboard's Preview 
 <td><strong>8–20</strong><br>Code Review<br><em>Find the bug</em></td>
 <td>
 
+**Features to highlight**
+
 - Requesting Copilot as a PR reviewer from **Reviewers**.
 - Inline review comments tied to specific lines, with suggested changes.
 - Pairing review findings with CI evidence, such as the failing check log.
 - What makes a review actionable: an exact condition, the code, and a test that proves it.
 
-</td>
-<td>
+**Presenter steps**
 
 1. Open the PR **Guard automation runs against stale telemetry** and request **Copilot** under **Reviewers** (skip if `--request-review` already did).
 2. While it runs, open the failing `build-and-test` log and show the single failing test.
 3. To steer the discussion, ask Copilot on the PR:
 
 ```text
-Review this PR for correctness at the exact five-minute freshness boundary. Cite the code and test that demonstrate the issue.
+Review this PR for correctness at the exact five-minute
+freshness boundary. Cite the code and test that demonstrate
+the issue.
 ```
 
 4. Walk through the comment on `age > TimeSpan.FromMinutes(5)` in `AutomationFreshness.cs`. **Leave the thread unresolved** for Agent Merge.
@@ -87,38 +92,43 @@ Review this PR for correctness at the exact five-minute freshness boundary. Cite
 <td><strong>20–35</strong><br>Cloud agent<br><em>Delegate parallel work</em></td>
 <td>
 
+**Features to highlight**
+
 - Assigning an issue to Copilot, or starting a cloud session from the Copilot app.
 - Work runs asynchronously in the cloud while you keep going locally.
 - Draft PR plus session logs to follow progress.
 - Scoping the agent with prompt boundaries and repository instructions.
 
-</td>
-<td>
+**Presenter steps**
 
 1. Open the issue **Add device telemetry history**.
 2. Assign it to Copilot (or start it as a cloud session from the Copilot app) with:
 
 ```text
-Implement device telemetry history with recent timestamped readings, following current API/UI conventions. Keep changes within readings API/service and device-detail UI; add focused tests.
+Implement device telemetry history with recent timestamped
+readings, following current API/UI conventions. Keep changes
+within readings API/service and device-detail UI; add focused
+tests.
 ```
 
 3. Show the draft PR and session log once it appears, then move on without waiting.
 
 </td>
-<td>The agent has started and opened a draft PR scoped to the readings API/service and device-detail UI. If it's slow, show <code>reference/telemetry-history</code> later.</td>
+<td>The agent has started and opened a draft PR scoped to the readings API/service and device-detail UI. If it's slow, show <code>reference/<wbr>telemetry-history</code> later.</td>
 </tr>
 
 <tr>
 <td><strong>35–45</strong><br>Copilot CLI<br><em>Fix the red PR</em></td>
 <td>
 
+**Features to highlight**
+
 - Copilot as an agent in the terminal, working in a local checkout.
 - Approving tool and command permissions as it runs.
 - Tracing a failing test to a root cause and making the smallest fix.
 - Running only the relevant test, then committing and pushing yourself.
 
-</td>
-<td>
+**Presenter steps**
 
 1. Check out the PR branch and start the CLI:
 
@@ -131,14 +141,19 @@ copilot
 2. Ask:
 
 ```text
-Explain why `AutomationEvaluator_SuppressesReadingAtFiveMinuteBoundary` fails, make the smallest fix, and run only that test.
+Explain why
+`AutomationEvaluator_SuppressesReadingAtFiveMinuteBoundary`
+fails, make the smallest fix, and run only that test.
 ```
 
 3. Confirm the one-character fix (`>` becomes `>=`), then verify and push:
 
 ```sh
-dotnet test tests/HomeLab.Api.Tests --filter FullyQualifiedName~AutomationEvaluator_SuppressesReadingAtFiveMinuteBoundary
-git commit -am "Treat readings exactly five minutes old as stale"
+dotnet test tests/HomeLab.Api.Tests \
+  --filter \
+  FullyQualifiedName~SuppressesReadingAtFiveMinuteBoundary
+git commit -am \
+  "Treat readings exactly five minutes old as stale"
 git push
 ```
 
@@ -150,19 +165,22 @@ git push
 <td><strong>45–55</strong><br>Copilot app<br><em>Research</em></td>
 <td>
 
+**Features to highlight**
+
 - Starting a session from an issue (**Add automation dry-run explanations**).
 - Read-only investigation before any implementation.
 - Source-grounded answers that cite files and existing test patterns.
 - Carrying constraints, such as preview-only behavior, into the next step.
 
-</td>
-<td>
+**Presenter steps**
 
 1. Start a Copilot app session for the issue **Add automation dry-run explanations**.
 2. Ask for research only:
 
 ```text
-Find how this repo models device readings and automation previews. Cite the files and identify relevant test patterns; do not change files.
+Find how this repo models device readings and automation
+previews. Cite the files and identify relevant test patterns;
+do not change files.
 ```
 
 3. Point out that no files changed.
@@ -175,18 +193,21 @@ Find how this repo models device readings and automation previews. Cite the file
 <td><strong>55–65</strong><br>Copilot app<br><em>Plan</em></td>
 <td>
 
+**Features to highlight**
+
 - Plan mode: Copilot asks clarifying questions before writing code.
 - A reviewable plan that lists files, todos, and acceptance tests.
 - Pushing back on scope so this work doesn't conflict with the Cloud agent's telemetry-history work.
 - The human approves the plan before implementation starts.
 
-</td>
-<td>
+**Presenter steps**
 
 1. In the same session, switch to **Plan** mode and ask:
 
 ```text
-Plan an automation dry-run explanation with trigger, proposed action, and explicit preview-only semantics. List files and acceptance tests before implementation.
+Plan an automation dry-run explanation with trigger, proposed
+action, and explicit preview-only semantics. List files and
+acceptance tests before implementation.
 ```
 
 2. Answer any clarifying questions. Push back if the plan touches telemetry-history files.
@@ -200,18 +221,20 @@ Plan an automation dry-run explanation with trigger, proposed action, and explic
 <td><strong>65–78</strong><br>Copilot app<br><em>Autopilot</em></td>
 <td>
 
+**Features to highlight**
+
 - Approving a plan to run in **Autopilot**.
 - Autonomous edits and test runs that follow repository instructions (`dotnet test HomeLab.sln`).
 - Reviewing the resulting diff before accepting it.
 - Preview-only semantics visible in both the API and the UI.
 
-</td>
-<td>
+**Presenter steps**
 
 1. Approve the plan with **Autopilot**. If the agent needs a nudge, use:
 
 ```text
-Implement the approved dry-run explanation plan, add focused tests, and report the resulting diff.
+Implement the approved dry-run explanation plan, add focused
+tests, and report the resulting diff.
 ```
 
 2. When it finishes, review the diff and run:
@@ -221,20 +244,21 @@ dotnet test HomeLab.sln
 ```
 
 </td>
-<td>Tests pass and the automation preview explains its trigger and action in plain language. If it's delayed, show <code>reference/automation-dry-run</code>.</td>
+<td>Tests pass and the automation preview explains its trigger and action in plain language. If it's delayed, show <code>reference/<wbr>automation-dry-run</code>.</td>
 </tr>
 
 <tr>
 <td><strong>78–90</strong><br>Agent Merge<br><em>Ship it</em></td>
 <td>
 
+**Features to highlight**
+
 - Turning on Agent Merge for a PR from the Copilot app.
 - Agent Merge actions: address review comments, fix failing CI, and resolve merge conflicts.
 - Keeping **merge PR** off so the human makes the final merge decision.
 - CI/CD on `main`: CI plus the **Build demo artifacts** workflow publishing `homelab-demo`.
 
-</td>
-<td>
+**Presenter steps**
 
 1. Open the stale-telemetry PR in the Copilot app.
 2. Turn on **Agent Merge** with address reviews, fix CI, and resolve conflicts enabled. Leave **merge PR** off.
