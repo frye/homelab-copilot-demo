@@ -61,7 +61,7 @@ fi
 
 create_issue() {
   local title="$1" body="$2" existing
-  existing="$(gh issue list --repo "$repo" --state open --search "in:title \"$title\"" --json number,title \
+  existing="$(gh issue list --repo "$repo" --state open --limit 500 --json number,title \
     --jq ".[] | select(.title == \"$title\") | .number" | head -1)"
   if [[ -n "$existing" ]]; then
     echo "- Issue #$existing '$title' already open, skipping"
