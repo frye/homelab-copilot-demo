@@ -31,13 +31,49 @@ The PR adds a deterministic-clock boundary test that fails when a reading exactl
 
 ### Suggested prompts
 
-- Copilot app: “Explain how the API and web projects fit together. Does the dashboard's Preview button call the API? Can anything here control real hardware?” (Expected discovery: the dashboard is static and doesn't call the API yet. That makes a good follow-up task.)
-- Code Review: “Review this PR for correctness at the exact five-minute freshness boundary. Cite the code and test that demonstrate the issue.”
-- Cloud agent: “Implement device telemetry history with recent timestamped readings, following current API/UI conventions. Keep changes within readings API/service and device-detail UI; add focused tests.”
-- CLI: “Explain why `AutomationEvaluator_SuppressesReadingAtFiveMinuteBoundary` fails, make the smallest fix, and run only that test.”
-- Research: “Find how this repo models device readings and automation previews. Cite the files and identify relevant test patterns; do not change files.”
-- Plan: “Plan an automation dry-run explanation with trigger, proposed action, and explicit preview-only semantics. List files and acceptance tests before implementation.”
-- Autopilot: “Implement the approved dry-run explanation plan, add focused tests, and report the resulting diff.”
+**Copilot app**
+
+```text
+Explain how the API and web projects fit together. Does the dashboard's Preview button call the API? Can anything here control real hardware?
+```
+
+Expected discovery: the dashboard is static and doesn't call the API yet. That makes a good follow-up task.
+
+**Code Review**
+
+```text
+Review this PR for correctness at the exact five-minute freshness boundary. Cite the code and test that demonstrate the issue.
+```
+
+**Cloud agent**
+
+```text
+Implement device telemetry history with recent timestamped readings, following current API/UI conventions. Keep changes within readings API/service and device-detail UI; add focused tests.
+```
+
+**CLI**
+
+```text
+Explain why `AutomationEvaluator_SuppressesReadingAtFiveMinuteBoundary` fails, make the smallest fix, and run only that test.
+```
+
+**Research**
+
+```text
+Find how this repo models device readings and automation previews. Cite the files and identify relevant test patterns; do not change files.
+```
+
+**Plan**
+
+```text
+Plan an automation dry-run explanation with trigger, proposed action, and explicit preview-only semantics. List files and acceptance tests before implementation.
+```
+
+**Autopilot**
+
+```text
+Implement the approved dry-run explanation plan, add focused tests, and report the resulting diff.
+```
 
 ## CI/CD
 
