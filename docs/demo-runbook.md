@@ -254,82 +254,183 @@ own. Add focused tests.
 
 Decisions already made (do not ask about these again):
 
-- Refresh failures: If a refresh fails, keep the last successful data and show an "API unreachable" banner. If the dashboard has never loaded successfully, show an unavailable state. Do not show made-up placeholder data.
-- Unsupported markup details: The API does not provide the current trend claims ("↑ …") or last-print details. Replace them with API-backed timestamps and reading history. Keep the existing layout, colors, card classes and responsive styling.
-- Previews remain hypothetical. Keep the visible preview-only, no-hardware wording, and do not add hardware actuation.
-- Change only the Web project and tests. Do not change API contracts or seed data, and do not add a shared contracts project.
+- Refresh failures: If a refresh fails, keep the last successful
+  data and show an "API unreachable" banner. If the dashboard has
+  never loaded successfully, show an unavailable state. Do not show
+  made-up placeholder data.
+- Unsupported markup details: The API does not provide the current
+  trend claims ("↑ …") or last-print details. Replace them with
+  API-backed timestamps and reading history. Keep the existing
+  layout, colors, card classes and responsive styling.
+- Previews remain hypothetical. Keep the visible preview-only,
+  no-hardware wording, and do not add hardware actuation.
+- Change only the Web project and tests. Do not change API contracts
+  or seed data, and do not add a shared contracts project.
 
 Execution instructions:
 
-- Implement the change fully. Do not stop after writing a plan, and do not ask for confirmation before starting.
-- Replace the Web project's local preview generator with API calls, and update its tests to match.
-- Use deterministic clocks (TimeProvider) and a fake HttpMessageHandler in tests. Cover routes and methods, the configured and default base URL, latest-reading selection, empty and missing data, HTTP, network and invalid-response failures, keeping data after a failure and recovering afterward, preview result text and preview errors (including 404), and the 5-second polling cycle and its cancellation.
-- Update the README with ApiBaseUrl configuration, the refresh behavior, and how to run each project independently.
-- Run `dotnet test HomeLab.sln` and make sure it passes. Commit the work on the current branch.
+- Implement the change fully. Do not stop after writing a plan, and
+  do not ask for confirmation before starting.
+- Replace the Web project's local preview generator with API calls,
+  and update its tests to match.
+- Use deterministic clocks (TimeProvider) and a fake
+  HttpMessageHandler in tests. Cover routes and methods, the
+  configured and default base URL, latest-reading selection, empty
+  and missing data, HTTP, network and invalid-response failures,
+  keeping data after a failure and recovering afterward, preview
+  result text and preview errors (including 404), and the 5-second
+  polling cycle and its cancellation.
+- Update the README with ApiBaseUrl configuration, the refresh
+  behavior, and how to run each project independently.
+- Run `dotnet test HomeLab.sln` and make sure it passes. Commit the
+  work on the current branch.
 ```
 
 **2. Telemetry simulator CLI with failure injection**
 
 ```text
-Add a console app tools/HomeLab.Simulator (.NET 9, add it to HomeLab.sln with `dotnet sln add`) that talks only to the API over HTTP (default http://localhost:5071). It must not reference the HomeLab.Api project or touch its store directly. `--api <url>` works on every command.
+Add a console app tools/HomeLab.Simulator (.NET 9, add it to
+HomeLab.sln with `dotnet sln add`) that talks only to the API over
+HTTP (default http://localhost:5071). It must not reference the
+HomeLab.Api project or touch its store directly. `--api <url>` works
+on every command.
 
 Commands:
 
-- emit [--api URL] [--seed INT] [--min SECONDS] [--max SECONDS]: send generated readings for the four seeded devices at random intervals until Ctrl+C. --min/--max are interval bounds in seconds (doubles, defaults 2 and 10; require 0 < min <= max). Default seed is 42. Fetch /api/devices once at startup and identify devices by Kind ("Temperature sensor", "CO₂ sensor", "3D printer", "Smart plug"). Report a missing or ambiguous device as an error. Before each tick, GET /api/faults and apply them. Handle Ctrl+C gracefully: cancel the delay and exit 0.
-- fail <fault>: inject a simulated fault. Valid faults: printer-power-off, rack-overheat, co2-sensor-offline.
+- emit [--api URL] [--seed INT] [--min SECONDS] [--max SECONDS]:
+  send generated readings for the four seeded devices at random
+  intervals until Ctrl+C. --min/--max are interval bounds in seconds
+  (doubles, defaults 2 and 10; require 0 < min <= max). Default seed
+  is 42. Fetch /api/devices once at startup and identify devices by
+  Kind ("Temperature sensor", "CO₂ sensor", "3D printer", "Smart
+  plug"). Report a missing or ambiguous device as an error. Before
+  each tick, GET /api/faults and apply them. Handle Ctrl+C
+  gracefully: cancel the delay and exit 0.
+- fail <fault>: inject a simulated fault. Valid faults:
+  printer-power-off, rack-overheat, co2-sensor-offline.
 - clear [fault]: clear one fault, or all faults if none is given.
 - status: list active faults with their activation times.
 
-Every command prints a banner saying the data is simulated and no physical hardware is contacted. Invalid arguments and HTTP or network failures return a nonzero exit code with an actionable message. If a reading POST returns 409 because a fault became active between GET and POST, print an explicit "skipped due to active fault" line and continue; the next tick refreshes the fault list. Any other emit failure exits 1.
+Every command prints a banner saying the data is simulated and no
+physical hardware is contacted. Invalid arguments and HTTP or
+network failures return a nonzero exit code with an actionable
+message. If a reading POST returns 409 because a fault became active
+between GET and POST, print an explicit "skipped due to active
+fault" line and continue; the next tick refreshes the fault list.
+Any other emit failure exits 1.
 
-Generation (seeded Random; timestamps from an injected TimeProvider; delays via Task.Delay(TimeSpan, TimeProvider, CancellationToken)):
+Generation (seeded Random; timestamps from an injected TimeProvider;
+delays via Task.Delay(TimeSpan, TimeProvider, CancellationToken)):
 
-- Rack "Temperature" °C: normally 26.0–29.0 (1 decimal). During rack-overheat, add 0.8–1.6 to the previous value on every tick. After the fault clears, return to the normal range.
-- Air "CO₂" ppm: integer 650–950. Send nothing while co2-sensor-offline is active.
-- Printer "Print progress" %: 0 (Idle). Send nothing while printer-power-off is active.
-- Plug "Power draw" W: standby 2.5–4.5 (1 decimal). Send exactly 0 while printer-power-off is active.
+- Rack "Temperature" °C: normally 26.0–29.0 (1 decimal). During
+  rack-overheat, add 0.8–1.6 to the previous value on every tick.
+  After the fault clears, return to the normal range.
+- Air "CO₂" ppm: integer 650–950. Send nothing while
+  co2-sensor-offline is active.
+- Printer "Print progress" %: 0 (Idle). Send nothing while
+  printer-power-off is active.
+- Plug "Power draw" W: standby 2.5–4.5 (1 decimal). Send exactly 0
+  while printer-power-off is active.
 - Each tick's delay is min + random × (max − min).
 
 API changes (src/HomeLab.Api):
 
-- HomeLabStore: keep the seed data byte-identical. Store private List-based devices and readings plus a fault dictionary behind a single lock. The Devices, Readings, and Faults properties return snapshot arrays. Automations stay immutable and preview behavior is unchanged. Never hold the lock across awaits. History is append-only and in memory; faults reset when the API restarts.
-- AppendReading returns Accepted, UnknownDevice, Invalid (blank metric or unit, or a non-finite value), or BlockedByFault. Block printer readings and nonzero plug readings during printer-power-off, and air-sensor readings during co2-sensor-offline, atomically under the lock. An accepted reading sets the device's LastSeen to the clock's now and does not change Status.
-- Faults are idempotent and timestamped with the TimeProvider. Activating printer-power-off immediately sets the printer and plug Status to "Offline" and appends a 0 W plug reading. Activating co2-sensor-offline sets the air sensor to "Offline". rack-overheat changes no status and only affects generation. Clearing a fault restores the affected devices' seeded statuses and keeps history.
+- HomeLabStore: keep the seed data byte-identical. Store private
+  List-based devices and readings plus a fault dictionary behind a
+  single lock. The Devices, Readings, and Faults properties return
+  snapshot arrays. Automations stay immutable and preview behavior
+  is unchanged. Never hold the lock across awaits. History is
+  append-only and in memory; faults reset when the API restarts.
+- AppendReading returns Accepted, UnknownDevice, Invalid (blank
+  metric or unit, or a non-finite value), or BlockedByFault. Block
+  printer readings and nonzero plug readings during
+  printer-power-off, and air-sensor readings during
+  co2-sensor-offline, atomically under the lock. An accepted reading
+  sets the device's LastSeen to the clock's now and does not change
+  Status.
+- Faults are idempotent and timestamped with the TimeProvider.
+  Activating printer-power-off immediately sets the printer and plug
+  Status to "Offline" and appends a 0 W plug reading. Activating
+  co2-sensor-offline sets the air sensor to "Offline". rack-overheat
+  changes no status and only affects generation. Clearing a fault
+  restores the affected devices' seeded statuses and keeps history.
 - Endpoints (keep the existing GET responses as plain arrays):
-    - POST /api/readings, body { deviceId, metric, value, unit, recordedAt }: 201 with { reading, isSimulated: true, message }. Unknown device: 404. Invalid: 400. Blocked by fault: 409.
-    - GET /api/faults: { isSimulated: true, message, faults: [{ name, description, activatedAt }] }.
-    - POST /api/faults, body { "fault": "<name>" }: 200 with the envelope plus the fault. Unknown name: 400 listing the valid names.
-    - DELETE /api/faults/{fault}: clears one fault and returns 200 with the envelope plus `cleared: [...]`; the list is empty if the fault wasn't active. Unknown name: 400.
-    - DELETE /api/faults: clears all faults and returns 200 with `cleared: [...]`.
-    - message = "Simulated state only; no physical hardware was contacted." Every new endpoint response, including errors, carries isSimulated and message.
+    - POST /api/readings, body { deviceId, metric, value, unit,
+      recordedAt }: 201 with { reading, isSimulated: true, message
+      }. Unknown device: 404. Invalid: 400. Blocked by fault: 409.
+    - GET /api/faults: { isSimulated: true, message, faults: [{
+      name, description, activatedAt }] }.
+    - POST /api/faults, body { "fault": "<name>" }: 200 with the
+      envelope plus the fault. Unknown name: 400 listing the valid
+      names.
+    - DELETE /api/faults/{fault}: clears one fault and returns 200
+      with the envelope plus `cleared: [...]`; the list is empty if
+      the fault wasn't active. Unknown name: 400.
+    - DELETE /api/faults: clears all faults and returns 200 with
+      `cleared: [...]`.
+    - message = "Simulated state only; no physical hardware was
+      contacted." Every new endpoint response, including errors,
+      carries isSimulated and message.
 
-Tests (tests/HomeLab.Api.Tests; reference the simulator project; keep the existing tests passing unchanged):
+Tests (tests/HomeLab.Api.Tests; reference the simulator project;
+keep the existing tests passing unchanged):
 
-- Add packages Microsoft.AspNetCore.Mvc.Testing 9.0.x and Microsoft.Extensions.TimeProvider.Testing 9.x. Make the simulator's types public in namespace HomeLab.Simulator.
-- Store: append validation, snapshot isolation, concurrent appends, clock-based LastSeen and fault timestamps, idempotency, immediate fault effects, clearing one or all faults, and retained history.
-- Endpoints: use WebApplicationFactory<Program> with a FakeTimeProvider.
-- Simulator: seeded determinism, interval bounds, fault-aware generation, rack temperature climbing and resetting, parser errors, request paths and payloads via a fake HttpMessageHandler, the 409 path, and cancellation.
+- Add packages Microsoft.AspNetCore.Mvc.Testing 9.0.x and
+  Microsoft.Extensions.TimeProvider.Testing 9.x. Make the
+  simulator's types public in namespace HomeLab.Simulator.
+- Store: append validation, snapshot isolation, concurrent appends,
+  clock-based LastSeen and fault timestamps, idempotency, immediate
+  fault effects, clearing one or all faults, and retained history.
+- Endpoints: use WebApplicationFactory<Program> with a
+  FakeTimeProvider.
+- Simulator: seeded determinism, interval bounds, fault-aware
+  generation, rack temperature climbing and resetting, parser
+  errors, request paths and payloads via a fake HttpMessageHandler,
+  the 409 path, and cancellation.
 
-Out of scope: hardware integrations, Web UI changes, persistent storage, and changes to automation previews.
+Out of scope: hardware integrations, Web UI changes, persistent
+storage, and changes to automation previews.
 
-Update the README with simulator usage and examples for every command and option, the new endpoint contracts, fault effects, in-memory lifetime, and the no-hardware guarantee. Run `dotnet test HomeLab.sln`. Then smoke-test locally: start the API on 5071 and run a short emit plus fail, status, and clear. Also confirm that POST /api/readings rejects an unknown device. Stop any background processes afterward.
+Update the README with simulator usage and examples for every
+command and option, the new endpoint contracts, fault effects,
+in-memory lifetime, and the no-hardware guarantee. Run `dotnet test
+HomeLab.sln`. Then smoke-test locally: start the API on 5071 and run
+a short emit plus fail, status, and clear. Also confirm that POST
+/api/readings rejects an unknown device. Stop any background
+processes afterward.
 ```
 
 **3. Rack threshold settings page**
 
 ```text
-Add configurable alert thresholds: rack temperature warning/critical (°C) and CO₂ warning/critical (ppm), seeded with 28/32 °C and 1000/1500 ppm.
+Add configurable alert thresholds: rack temperature warning/critical
+(°C) and CO₂ warning/critical (ppm), seeded with 28/32 °C and
+1000/1500 ppm.
 
-API: add GET and PUT /api/settings/thresholds, stored in memory. Settings reset to the seeded defaults when the API restarts. Validation rules:
+API: add GET and PUT /api/settings/thresholds, stored in memory.
+Settings reset to the seeded defaults when the API restarts.
+Validation rules:
 
 - Rack temperature: allowed range is 0–100 °C, inclusive.
 - CO₂: allowed range is 400–10,000 ppm, inclusive.
-- For each metric, warning must be strictly less than critical. Equal values are invalid.
+- For each metric, warning must be strictly less than critical.
+  Equal values are invalid.
 - Return 400 with field errors.
 
-Web: add a /settings page with a form that loads and saves through the API. Read the API base URL from config, with a default of http://localhost:5071. The form must show validation errors inline and confirm successful saves. Add navigation between the dashboard and settings. State on the page that thresholds only describe when previews would fire and never control hardware.
+Web: add a /settings page with a form that loads and saves through
+the API. Read the API base URL from config, with a default of
+http://localhost:5071. The form must show validation errors inline
+and confirm successful saves. Add navigation between the dashboard
+and settings. State on the page that thresholds only describe when
+previews would fire and never control hardware.
 
-Dashboard alignment: the dashboard currently uses fixed 28 °C text and builds previews locally without calling the API. Update it so the dashboard rack trigger and preview text, and the API rack preview text, use the saved rack warning threshold. If the API is unavailable, the dashboard uses the seeded defaults and shows a visible notice. Do not add new automations, live alert evaluation, CO₂ automations, or persistence across restarts.
+Dashboard alignment: the dashboard currently uses fixed 28 °C text
+and builds previews locally without calling the API. Update it so
+the dashboard rack trigger and preview text, and the API rack
+preview text, use the saved rack warning threshold. If the API is
+unavailable, the dashboard uses the seeded defaults and shows a
+visible notice. Do not add new automations, live alert evaluation,
+CO₂ automations, or persistence across restarts.
 
 Tests: add API tests for validation.
 ```
@@ -341,80 +442,164 @@ Add an alerts feed to the HomeLab demo.
 
 API (src/HomeLab.Api):
 
-- GET /api/alerts builds alerts from the current readings and device status. For each device and metric, use only the latest reading (by RecordedAt). Ignore older readings that crossed a threshold.
-    - Rack temperature >= 28 °C is a warning. At >= 32 °C, produce one critical alert instead of the warning.
+- GET /api/alerts builds alerts from the current readings and device
+  status. For each device and metric, use only the latest reading
+  (by RecordedAt). Ignore older readings that crossed a threshold.
+    - Rack temperature >= 28 °C is a warning. At >= 32 °C, produce
+      one critical alert instead of the warning.
     - CO₂ >= 1000 ppm is a warning.
-    - A device whose status is anything other than Healthy, Idle or On gets a warning.
-- Each alert has: a stable id (based on device + condition, not on the value or severity), severity, device, message, timestamp, acknowledged flag, and an explicit informational-only indicator.
-- Sort critical alerts before warnings, with a deterministic tie-breaker.
-- The timestamp is when the alert was first detected, taken from the injected TimeProvider. It stays the same on repeat GETs.
-- POST /api/alerts/{id}/ack marks an alert acknowledged, in memory only (thread-safe). Repeating it on an active alert is harmless and returns that alert. An unknown or resolved id returns 404. Acknowledging never changes readings, devices or automations.
+    - A device whose status is anything other than Healthy, Idle or
+      On gets a warning.
+- Each alert has: a stable id (based on device + condition, not on
+  the value or severity), severity, device, message, timestamp,
+  acknowledged flag, and an explicit informational-only indicator.
+- Sort critical alerts before warnings, with a deterministic
+  tie-breaker.
+- The timestamp is when the alert was first detected, taken from the
+  injected TimeProvider. It stays the same on repeat GETs.
+- POST /api/alerts/{id}/ack marks an alert acknowledged, in memory
+  only (thread-safe). Repeating it on an active alert is harmless
+  and returns that alert. An unknown or resolved id returns 404.
+  Acknowledging never changes readings, devices or automations.
 
 Acknowledgment behavior (decided, don't ask):
 
-- Acknowledged alerts stay in the GET results, marked acknowledged, while their condition is still active.
-- When an evaluation finds the condition has cleared, remove its state. If the condition comes back later, it's a new episode: unacknowledged, with a new timestamp.
+- Acknowledged alerts stay in the GET results, marked acknowledged,
+  while their condition is still active.
+- When an evaluation finds the condition has cleared, remove its
+  state. If the condition comes back later, it's a new episode:
+  unacknowledged, with a new timestamp.
 
 Web (src/HomeLab.Web), decided, don't ask:
 
-- The Web app must keep running without the API. If an API base URL is configured, the alerts page calls the API. Otherwise it runs in a clearly labeled standalone demo mode that uses the same shared alert rules and seed data.
-- If the API is configured and a call fails, show an error with a retry option. Never fall back to local data silently.
-- Put the shared telemetry models, seed data and alert evaluator in a small shared library (e.g. src/HomeLab.Core) referenced by both apps, and add it to HomeLab.sln. Keep the existing API endpoints and automation-preview behavior unchanged.
-- Add an interactive /alerts page with alerts grouped/ordered by severity. Show severity, device, message, timestamp and acknowledgment state, with Acknowledge buttons that are disabled once acknowledged or while pending. Include loading, empty and error states, a refresh button, an indicator of the source mode, and a link back to the dashboard.
-- Show clearly on the page that alerts are informational only and never trigger hardware.
-- Link to /alerts from the dashboard without changing the existing cards.
+- The Web app must keep running without the API. If an API base URL
+  is configured, the alerts page calls the API. Otherwise it runs in
+  a clearly labeled standalone demo mode that uses the same shared
+  alert rules and seed data.
+- If the API is configured and a call fails, show an error with a
+  retry option. Never fall back to local data silently.
+- Put the shared telemetry models, seed data and alert evaluator in
+  a small shared library (e.g. src/HomeLab.Core) referenced by both
+  apps, and add it to HomeLab.sln. Keep the existing API endpoints
+  and automation-preview behavior unchanged.
+- Add an interactive /alerts page with alerts grouped/ordered by
+  severity. Show severity, device, message, timestamp and
+  acknowledgment state, with Acknowledge buttons that are disabled
+  once acknowledged or while pending. Include loading, empty and
+  error states, a refresh button, an indicator of the source mode,
+  and a link back to the dashboard.
+- Show clearly on the page that alerts are informational only and
+  never trigger hardware.
+- Link to /alerts from the dashboard without changing the existing
+  cards.
 
 Tests (deterministic, fixed clock / fake TimeProvider):
 
-- The seed data produces exactly one warning, from the 28.4 °C rack reading.
-- Cover: threshold boundaries; critical replacing warning; latest-reading selection; CO₂ and all status rules; stable ids and timestamps; repeated ack; unknown/resolved ids; reset when a condition clears and recurs (use synthetic telemetry snapshots, not new mutation endpoints).
-- Add API endpoint tests with WebApplicationFactory and an overridden TimeProvider.
-- Add Web alerts-service tests for local mode, HTTP mode and failure handling.
+- The seed data produces exactly one warning, from the 28.4 °C rack
+  reading.
+- Cover: threshold boundaries; critical replacing warning;
+  latest-reading selection; CO₂ and all status rules; stable ids and
+  timestamps; repeated ack; unknown/resolved ids; reset when a
+  condition clears and recurs (use synthetic telemetry snapshots,
+  not new mutation endpoints).
+- Add API endpoint tests with WebApplicationFactory and an
+  overridden TimeProvider.
+- Add Web alerts-service tests for local mode, HTTP mode and failure
+  handling.
 
-Also update the README: endpoints, thresholds, ack semantics, in-memory lifecycle, API vs standalone configuration, and the informational-only note. No persistence, alert history, background polling or hardware integrations.
+Also update the README: endpoints, thresholds, ack semantics,
+in-memory lifecycle, API vs standalone configuration, and the
+informational-only note. No persistence, alert history, background
+polling or hardware integrations.
 
-Run `dotnet test HomeLab.sln`, make sure both apps still start on their own, and smoke-test GET/ack and the page.
+Run `dotnet test HomeLab.sln`, make sure both apps still start on
+their own, and smoke-test GET/ack and the page.
 ```
 
 **5. Light/dark theme toggle**
 
 ```text
-Add a light/dark theme toggle to the Blazor UI in src/HomeLab.Web only. Implement it now. Don't stop at a plan or ask clarifying questions, because the decisions are below.
+Add a light/dark theme toggle to the Blazor UI in src/HomeLab.Web
+only. Implement it now. Don't stop at a plan or ask clarifying
+questions, because the decisions are below.
 
 Scope and constraints:
 
-- Only edit files under src/HomeLab.Web: wwwroot/app.css, Components/App.razor, Components/Layout/MainLayout.razor, Components/Layout/MainLayout.razor.css, and one new wwwroot/theme.js.
-- Don't change src/HomeLab.Api, the tests, Program.cs, Components/Pages/*.razor (page content), seed data, or render modes. No new NuGet or npm packages.
+- Only edit files under src/HomeLab.Web: wwwroot/app.css,
+  Components/App.razor, Components/Layout/MainLayout.razor,
+  Components/Layout/MainLayout.razor.css, and one new
+  wwwroot/theme.js.
+- Don't change src/HomeLab.Api, the tests, Program.cs,
+  Components/Pages/*.razor (page content), seed data, or render
+  modes. No new NuGet or npm packages.
 - Keep the API and Web projects independently runnable.
 
 Colors and palettes:
 
-- Move every hard-coded color in wwwroot/app.css into CSS custom properties. This covers the hex values, the body radial-gradient, the card/button linear-gradients, the sparkline gradient and the border colors in the @media blocks.
-- Use semantic names with a --color- prefix (for example --color-bg, --color-surface, --color-border, --color-text, --color-text-muted, --color-accent, --color-warm). Reuse one variable for near-duplicate values only if the dark theme still looks the same.
-- Define the current values as the dark palette on :root and :root[data-theme="dark"], and the light palette on :root[data-theme="light"]. The dark theme must render exactly as it does today.
-- Write a matching light palette with the same green, blue, violet and amber accent families, adjusted for a light background. Body text and important text must reach at least 4.5:1 contrast (WCAG AA). Muted/mono labels must reach at least 4.5:1 too, because they're small (8–11px).
+- Move every hard-coded color in wwwroot/app.css into CSS custom
+  properties. This covers the hex values, the body radial-gradient,
+  the card/button linear-gradients, the sparkline gradient and the
+  border colors in the @media blocks.
+- Use semantic names with a --color- prefix (for example --color-bg,
+  --color-surface, --color-border, --color-text, --color-text-muted,
+  --color-accent, --color-warm). Reuse one variable for
+  near-duplicate values only if the dark theme still looks the same.
+- Define the current values as the dark palette on :root and
+  :root[data-theme="dark"], and the light palette on
+  :root[data-theme="light"]. The dark theme must render exactly as
+  it does today.
+- Write a matching light palette with the same green, blue, violet
+  and amber accent families, adjusted for a light background. Body
+  text and important text must reach at least 4.5:1 contrast (WCAG
+  AA). Muted/mono labels must reach at least 4.5:1 too, because
+  they're small (8–11px).
 - Set color-scheme: dark or light for each theme.
-- Keep app.css's minified one-line style. Leave the #blazor-error-ui styles as they are.
+- Keep app.css's minified one-line style. Leave the #blazor-error-ui
+  styles as they are.
 
 Toggle:
 
-- Put a native <button type="button"> in MainLayout.razor above @Body, fixed in the top-right corner. Style it in MainLayout.razor.css with the theme variables.
-- It needs a visible text label (for example "☀ Light" / "☾ Dark", showing the current theme) and aria-pressed="true" when dark is active. Use one stable aria-label of "Dark theme" so the label and the pressed state don't contradict each other.
-- Give it a clear :focus-visible outline and make it keyboard-operable.
-- The layout uses static SSR, so the toggle can't depend on Blazor interactivity. Wire it up with plain JS in wwwroot/theme.js and use event delegation on document, so it keeps working after Blazor enhanced navigation re-renders the layout. Update the label and aria-pressed when the page loads, when the button is clicked, and on Blazor's "enhancedload" event.
+- Put a native <button type="button"> in MainLayout.razor above
+  @Body, fixed in the top-right corner. Style it in
+  MainLayout.razor.css with the theme variables.
+- It needs a visible text label (for example "☀ Light" / "☾ Dark",
+  showing the current theme) and aria-pressed="true" when dark is
+  active. Use one stable aria-label of "Dark theme" so the label and
+  the pressed state don't contradict each other.
+- Give it a clear :focus-visible outline and make it
+  keyboard-operable.
+- The layout uses static SSR, so the toggle can't depend on Blazor
+  interactivity. Wire it up with plain JS in wwwroot/theme.js and
+  use event delegation on document, so it keeps working after Blazor
+  enhanced navigation re-renders the layout. Update the label and
+  aria-pressed when the page loads, when the button is clicked, and
+  on Blazor's "enhancedload" event.
 
 Persistence and avoiding a flash on load:
 
-- Store the choice in localStorage under the key "homelab-theme" as "light" or "dark". Wrap storage access in try/catch.
-- With no saved choice, follow prefers-color-scheme, and keep following live OS changes until the user picks a theme explicitly. There's no "reset to system" option.
-- Put a small inline <script> in the <head> of App.razor, before the stylesheet links. It sets document.documentElement.dataset.theme from localStorage, falling back to matchMedia, so the correct theme applies before the first paint. Load theme.js with a normal script tag via @Assets["theme.js"] before blazor.web.js.
-- Don't add theme transitions that would cause visible animation on load.
+- Store the choice in localStorage under the key "homelab-theme" as
+  "light" or "dark". Wrap storage access in try/catch.
+- With no saved choice, follow prefers-color-scheme, and keep
+  following live OS changes until the user picks a theme explicitly.
+  There's no "reset to system" option.
+- Put a small inline <script> in the <head> of App.razor, before the
+  stylesheet links. It sets document.documentElement.dataset.theme
+  from localStorage, falling back to matchMedia, so the correct
+  theme applies before the first paint. Load theme.js with a normal
+  script tag via @Assets["theme.js"] before blazor.web.js.
+- Don't add theme transitions that would cause visible animation on
+  load.
 
 Verification:
 
-- Run `dotnet build HomeLab.sln` and `dotnet test HomeLab.sln`. Both must pass. No new tests are required, since there's no Web test project.
-- Run the Web app, then curl the page to confirm the inline head script, the button with aria-pressed and a visible label, and theme.js are in the HTML.
-- If a browser canvas is available, check both themes visually and confirm a reload keeps the saved choice.
+- Run `dotnet build HomeLab.sln` and `dotnet test HomeLab.sln`. Both
+  must pass. No new tests are required, since there's no Web test
+  project.
+- Run the Web app, then curl the page to confirm the inline head
+  script, the button with aria-pressed and a visible label, and
+  theme.js are in the HTML.
+- If a browser canvas is available, check both themes visually and
+  confirm a reload keeps the saved choice.
 - Commit to the current branch.
 ```
 
