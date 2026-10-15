@@ -1,13 +1,14 @@
 # Attendee guide: A Day in the Life of a Developer with Copilot
 
-You'll work in your own copy of **Labwatch**, a simulated home-lab dashboard (ASP.NET Core API + Blazor web UI). Over 90 minutes you'll review and fix a red pull request, hand an issue to the Cloud agent, use Copilot CLI, plan from an issue and build it with Autopilot, and finish with Agent Merge. Nothing here controls real hardware.
+You'll work in your own copy of **Labwatch**, a simulated home-lab dashboard (ASP.NET Core API + Blazor web UI). Over 90 minutes you'll explore the code with Copilot in VS Code, move to GitHub in the browser for Code Review and Cloud agent delegation, and fix a red pull request with Copilot CLI. Later, you'll use the GitHub Copilot app to plan from an issue, build it with Autopilot, and finish with Agent Merge. Nothing here controls real hardware.
 
 ## Before the session (15 minutes)
 
 ### You need
 
 - A GitHub account with a Copilot plan that includes Code Review, the Cloud agent, and Agent Merge.
-- The GitHub Copilot app and Copilot CLI (`copilot`), both signed in.
+- VS Code with GitHub Copilot enabled and signed in. Confirm Copilot Chat and inline chat are available.
+- The GitHub Copilot app and Copilot CLI (`copilot`), both signed in, for the later modules.
 - [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0), `git`, and the [GitHub CLI](https://cli.github.com/) (`gh auth login`).
 - On Windows, run the setup script from Git Bash or WSL.
 
@@ -31,7 +32,7 @@ You'll work in your own copy of **Labwatch**, a simulated home-lab dashboard (AS
 
    This pushes `demo/stale-telemetry-boundary`, opens the PR **Guard automation runs against stale telemetry**, and opens two issues: **Add device telemetry history** and **Add automation dry-run explanations**. Re-running it is safe.
 4. In your repo's **Actions** tab, enable workflows if prompted. Within a couple of minutes, the PR's `build-and-test` check should be **red** with exactly one failing test. That's intentional.
-5. Add your repo to the Copilot app as a project.
+5. Open the cloned repository folder in VS Code. Stay on `main`; you'll add the repo to the GitHub Copilot app in module 5.
 
 ### Starting-state checklist
 
@@ -51,17 +52,28 @@ Open <http://localhost:5072>. You should see four devices (rack temperature, CO�
 
 Follow along with the presenter. Each module lists what to do and how you know you're done. If something stalls, move on with the group and come back later. The modules are mostly independent.
 
-### 1. Copilot app: get oriented (0–8 min)
+### 1. VS Code: get oriented with Copilot (0–8 min)
 
-Open your project in the Copilot app and ask:
+1. In VS Code, use **File > Open Folder** to open your cloned repository on `main`. Open Copilot Chat and select **Ask** to explore without requesting edits.
+2. Read `.github/copilot-instructions.md` so you can see the repository's preview-only and testing instructions.
+3. Use **Add Context** in Chat to attach `src/HomeLab.Api/Program.cs`, `src/HomeLab.Api/HomeLabStore.cs`, and `src/HomeLab.Web/Components/Pages/Home.razor`. Ask:
 
-> Explain how the API and web projects fit together. Does the dashboard's Preview button call the API? Can anything here control real hardware?
+   > Explain how the API and web projects fit together. Does the dashboard's Preview button call the API? Can anything here control real hardware? Cite the files that support your answer. Do not change any files.
 
-**Done when:** you can name the API project, the web project, and where seed data lives (`HomeLabStore.cs`), and you've noticed the dashboard is still static: it doesn't call the API yet.
+4. Follow the file references in the answer and check the source.
+5. In `Home.razor`, select the `Preview` method and open **Inline Chat** from the editor context menu. Ask:
+
+   > Explain what this selected method does and whether it calls the API or controls hardware. Explain only; do not edit code.
+
+6. Close inline chat after reading the explanation. Discard any proposed edits. Leave the intentionally failing PR untouched for module 4.
+
+**Done when:** you can name the API project, the web project, and where seed data lives (`HomeLabStore.cs`), and explain why Preview doesn't call the API. You've used Chat with file context and inline chat with a selection, without changing files.
+
+Now switch to the browser, view the dashboard at <http://localhost:5072>, and open your repository on GitHub. The GitHub Copilot app comes in module 5.
 
 ### 2. Code Review: find the bug (8–20 min)
 
-On your PR, open **Reviewers** and request **Copilot**. While it runs, open the failing check's log.
+In GitHub in the browser, open your PR, open **Reviewers**, and request **Copilot**. While it runs, open the failing check's log.
 
 > Review this PR for correctness at the exact five-minute freshness boundary. Cite the code and test that demonstrate the issue.
 
@@ -69,7 +81,7 @@ On your PR, open **Reviewers** and request **Copilot**. While it runs, open the 
 
 ### 3. Cloud agent: delegate parallel work (20–35 min)
 
-Open the **Add device telemetry history** issue and assign it to Copilot (or start it from the Copilot app as a cloud session). Don't wait for it; it runs while you continue.
+Stay in GitHub in the browser. Open the **Add device telemetry history** issue and assign it to Copilot. Don't wait for it; it runs while you continue.
 
 **Done when:** the agent has started and opened a draft PR. Check back after module 5.
 
@@ -95,7 +107,7 @@ git push
 
 ### 5. Plan from an issue (45–65 min)
 
-In the Copilot app, start a session from the **Add automation dry-run explanations** issue. Copilot starts planning automatically: it reads the code, asks a few clarifying questions, and writes a plan with the files and tests it intends to change.
+Now open the GitHub Copilot app and add your repository as a project. Start a session from the **Add automation dry-run explanations** issue. Copilot starts planning automatically: it reads the code, asks a few clarifying questions, and writes a plan with the files and tests it intends to change.
 
 Answer its questions, then read the plan. Push back with **Suggest changes** if it touches telemetry-history files, since the Cloud agent owns those. Don't approve it yet.
 
