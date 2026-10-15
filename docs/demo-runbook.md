@@ -20,6 +20,8 @@ The PR adds a deterministic-clock boundary test that fails when a reading exactl
 
 Work through the rows in order. Each row lists the features to call out, the presenter steps with copy-ready prompts and commands in the order you use them, and the checkpoint to confirm before moving on.
 
+Start in VS Code with read-only code exploration. Then switch to GitHub in the browser for Code Review and Cloud agent delegation. Introduce the GitHub Copilot app at **Plan from an issue**, after the CLI exercise.
+
 <table>
 <thead>
 <tr>
@@ -31,36 +33,47 @@ Work through the rows in order. Each row lists the features to call out, the pre
 <tbody>
 
 <tr>
-<td><strong>0–8</strong><br>Copilot app<br><em>Orientation</em></td>
+<td><strong>0–8</strong><br>VS Code<br><em>Orientation</em></td>
 <td>
 
 **Features to highlight**
 
-- Adding a repo as a project; each session gets its own isolated worktree and branch.
-- Repository custom instructions (`.github/copilot-instructions.md`) shape every answer: simulated hardware only, previews only, run tests.
-- Asking questions about the codebase and getting answers that cite files.
-- Previewing the running dashboard next to the chat.
+- Copilot Chat in VS Code: use **Ask** for code questions without requesting edits.
+- Adding files or a selection as chat context so Copilot can answer about the code you're showing.
+- Repository custom instructions (`.github/copilot-instructions.md`): simulated hardware only, previews only, run tests.
+- Inline chat: ask about a selected block without leaving the editor.
+- Following file references in an answer and checking them against the source.
 
 **Presenter steps**
 
-1. Open the attendee's repo as a project and start a session.
-2. Show the running dashboard at `http://localhost:5072`.
-3. Ask:
+1. In VS Code, use **File > Open Folder** to open the cloned repository on `main`. Open Copilot Chat and select **Ask**.
+2. Open `.github/copilot-instructions.md` and point out the preview-only constraint.
+3. Add `src/HomeLab.Api/Program.cs`, `src/HomeLab.Api/HomeLabStore.cs`, and `src/HomeLab.Web/Components/Pages/Home.razor` as chat context using **Add Context**. Ask:
 
 ```text
 Explain how the API and web projects fit together.
 Does the dashboard's Preview button call the API?
 Can anything here control real hardware?
+Cite the files that support your answer. Do not change any files.
 ```
 
-4. Point out the discovery: the dashboard is static and doesn't call the API yet. That makes a good follow-up task.
+4. Follow the answer's file references. Point out that the dashboard uses hard-coded data and its Preview button doesn't call the API yet.
+5. In `Home.razor`, select the `Preview` method, open **Inline Chat** from the editor context menu, and ask:
+
+```text
+Explain what this selected method does and whether it calls
+the API or controls hardware. Explain only; do not edit code.
+```
+
+6. Read the explanation, then close inline chat. Discard any proposed edits; keep the working tree unchanged and leave the red PR for the CLI exercise.
+7. Switch to the browser, show the running dashboard at `http://localhost:5072`, then open the repository's PR for Code Review. The GitHub Copilot app comes later.
 
 </td>
-<td>Attendees can name the API and web projects, find the seed data (<code>HomeLabStore.cs</code>), and see that the UI is still static.</td>
+<td>Attendees can name the API and web projects, find the seed data (<code>HomeLabStore.cs</code>), and explain the local Preview method using Chat and inline chat. No files have changed.</td>
 </tr>
 
 <tr>
-<td><strong>8–20</strong><br>Code Review<br><em>Find the bug</em></td>
+<td><strong>8–20</strong><br>GitHub in the browser<br><em>Code Review: find the bug</em></td>
 <td>
 
 **Features to highlight**
@@ -72,7 +85,7 @@ Can anything here control real hardware?
 
 **Presenter steps**
 
-1. Open the PR **Guard automation runs against stale telemetry** and request **Copilot** under **Reviewers** (skip if `--request-review` already did).
+1. In GitHub in the browser, open the PR **Guard automation runs against stale telemetry** and request **Copilot** under **Reviewers** (skip if `--request-review` already did).
 2. While it runs, open the failing `build-and-test` log and show the single failing test.
 3. To steer the discussion, ask Copilot on the PR:
 
@@ -89,20 +102,20 @@ the issue.
 </tr>
 
 <tr>
-<td><strong>20–35</strong><br>Cloud agent<br><em>Delegate parallel work</em></td>
+<td><strong>20–35</strong><br>GitHub in the browser<br><em>Cloud agent: delegate parallel work</em></td>
 <td>
 
 **Features to highlight**
 
-- Assigning an issue to Copilot, or starting a cloud session from the Copilot app.
+- Assigning an issue to Copilot from GitHub in the browser.
 - Work runs asynchronously in the cloud while you keep going locally.
 - Draft PR plus session logs to follow progress.
 - Scoping the agent with prompt boundaries and repository instructions.
 
 **Presenter steps**
 
-1. Open the issue **Add device telemetry history**.
-2. Assign it to Copilot (or start it as a cloud session from the Copilot app) with:
+1. Stay in the browser and open the issue **Add device telemetry history**.
+2. Assign it to Copilot with:
 
 ```text
 Implement device telemetry history with recent timestamped
@@ -179,6 +192,7 @@ git push
 
 **Features to highlight**
 
+- Adding the repository as a project in the GitHub Copilot app; local sessions use isolated worktrees and branches.
 - Starting a session from an issue (**Add automation dry-run explanations**) automatically kicks off the plan agent with the issue as context. No prompt needed.
 - Research built into planning: the agent reads the code and cites the files and test patterns it relies on before proposing changes.
 - Clarifying questions with suggested answers, asked one at a time.
@@ -188,7 +202,7 @@ git push
 
 **Presenter steps**
 
-1. In the Copilot app, start a session from the issue **Add automation dry-run explanations**. Point out that planning starts on its own.
+1. Open the GitHub Copilot app and add the repository as a project. Start a session from the issue **Add automation dry-run explanations**. Point out that planning starts on its own.
 2. While it works, narrate what the agent is doing: reading the automation and readings code, finding test patterns, and noting constraints from `.github/copilot-instructions.md` (previews only, no hardware).
 3. Answer its clarifying questions. Prefer the recommended choices unless you want to show steering.
 4. Open the plan and walk through it: the approach, the files in scope, the acceptance tests, and preview-only semantics in both the API and the UI.
@@ -675,6 +689,7 @@ dotnet test HomeLab.sln
 
 Before the session:
 - Confirm attendees can see the template. A private template is only usable by people with access, so make it public or add attendees.
+- Confirm VS Code opens the cloned repository, Copilot is enabled and signed in, and Chat and inline chat are available. Keep the opening on `main` and read-only.
 - Confirm Actions run in a fresh copy, and that Code Review, Cloud agent, and Agent Merge are available on the accounts in use.
 - Configure and verify the merge gates below in each presenter/attendee repository before the walkthrough. Template copies do not inherit these settings, and `scripts/setup-demo.sh` does not configure them.
 - Do a full rehearsal in a fresh copy. Push the Cloud agent and Autopilot results to `reference/telemetry-history` and `reference/automation-dry-run` branches to use as fallbacks. These aren't pre-built.
