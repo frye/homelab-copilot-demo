@@ -1,0 +1,602 @@
+{
+  "Version": 1,
+  "ManifestType": "Build",
+  "Endpoints": [
+    {
+      "Route": "HomeLab.Web.ga6q7r1atc.styles.css",
+      "AssetFile": "HomeLab.Web.styles.css.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.003048780488"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "327"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Ha/7te0vjc1QLvQPgfAcU/em1P9h5FwPyDGw/A/GgdQ=\""
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"qBogr4vJHVmDDoAn+zDnKYcI9ERpSHaofSZXDwhEt2E=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 Oct 2026 01:43:14 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ga6q7r1atc"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-qBogr4vJHVmDDoAn+zDnKYcI9ERpSHaofSZXDwhEt2E="
+        },
+        {
+          "Name": "label",
+          "Value": "HomeLab.Web.styles.css"
+        }
+      ]
+    },
+    {
+      "Route": "HomeLab.Web.ga6q7r1atc.styles.css",
+      "AssetFile": "HomeLab.Web.styles.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "541"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"qBogr4vJHVmDDoAn+zDnKYcI9ERpSHaofSZXDwhEt2E=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 Oct 2026 01:43:14 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ga6q7r1atc"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-qBogr4vJHVmDDoAn+zDnKYcI9ERpSHaofSZXDwhEt2E="
+        },
+        {
+          "Name": "label",
+          "Value": "HomeLab.Web.styles.css"
+        }
+      ]
+    },
+    {
+      "Route": "HomeLab.Web.ga6q7r1atc.styles.css.gz",
+      "AssetFile": "HomeLab.Web.styles.css.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "327"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Ha/7te0vjc1QLvQPgfAcU/em1P9h5FwPyDGw/A/GgdQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 Oct 2026 01:43:14 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ga6q7r1atc"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Ha/7te0vjc1QLvQPgfAcU/em1P9h5FwPyDGw/A/GgdQ="
+        },
+        {
+          "Name": "label",
+          "Value": "HomeLab.Web.styles.css.gz"
+        }
+      ]
+    },
+    {
+      "Route": "HomeLab.Web.styles.css",
+      "AssetFile": "HomeLab.Web.styles.css.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.003048780488"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "327"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Ha/7te0vjc1QLvQPgfAcU/em1P9h5FwPyDGw/A/GgdQ=\""
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"qBogr4vJHVmDDoAn+zDnKYcI9ERpSHaofSZXDwhEt2E=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 Oct 2026 01:43:14 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-qBogr4vJHVmDDoAn+zDnKYcI9ERpSHaofSZXDwhEt2E="
+        }
+      ]
+    },
+    {
+      "Route": "HomeLab.Web.styles.css",
+      "AssetFile": "HomeLab.Web.styles.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "541"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"qBogr4vJHVmDDoAn+zDnKYcI9ERpSHaofSZXDwhEt2E=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 Oct 2026 01:43:14 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-qBogr4vJHVmDDoAn+zDnKYcI9ERpSHaofSZXDwhEt2E="
+        }
+      ]
+    },
+    {
+      "Route": "HomeLab.Web.styles.css.gz",
+      "AssetFile": "HomeLab.Web.styles.css.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "327"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Ha/7te0vjc1QLvQPgfAcU/em1P9h5FwPyDGw/A/GgdQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 Oct 2026 01:43:14 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Ha/7te0vjc1QLvQPgfAcU/em1P9h5FwPyDGw/A/GgdQ="
+        }
+      ]
+    },
+    {
+      "Route": "app.css",
+      "AssetFile": "app.css.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000523834468"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1908"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"l85R7YE1aiJvisss5IjTun85m3s1Q4JHRsgz2q7Iy5g=\""
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"baMVtmB5dPfjYHgjCPXtuN+srvXBA+pIylvZ7FDs5bs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 Oct 2026 01:41:47 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-baMVtmB5dPfjYHgjCPXtuN+srvXBA+pIylvZ7FDs5bs="
+        }
+      ]
+    },
+    {
+      "Route": "app.css",
+      "AssetFile": "app.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "5678"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"baMVtmB5dPfjYHgjCPXtuN+srvXBA+pIylvZ7FDs5bs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 Oct 2026 01:41:47 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-baMVtmB5dPfjYHgjCPXtuN+srvXBA+pIylvZ7FDs5bs="
+        }
+      ]
+    },
+    {
+      "Route": "app.css.gz",
+      "AssetFile": "app.css.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1908"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"l85R7YE1aiJvisss5IjTun85m3s1Q4JHRsgz2q7Iy5g=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 Oct 2026 01:41:47 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-l85R7YE1aiJvisss5IjTun85m3s1Q4JHRsgz2q7Iy5g="
+        }
+      ]
+    },
+    {
+      "Route": "app.ralji6k8kb.css",
+      "AssetFile": "app.css.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000523834468"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1908"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"l85R7YE1aiJvisss5IjTun85m3s1Q4JHRsgz2q7Iy5g=\""
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"baMVtmB5dPfjYHgjCPXtuN+srvXBA+pIylvZ7FDs5bs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 Oct 2026 01:41:47 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ralji6k8kb"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-baMVtmB5dPfjYHgjCPXtuN+srvXBA+pIylvZ7FDs5bs="
+        },
+        {
+          "Name": "label",
+          "Value": "app.css"
+        }
+      ]
+    },
+    {
+      "Route": "app.ralji6k8kb.css",
+      "AssetFile": "app.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "5678"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"baMVtmB5dPfjYHgjCPXtuN+srvXBA+pIylvZ7FDs5bs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 Oct 2026 01:41:47 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ralji6k8kb"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-baMVtmB5dPfjYHgjCPXtuN+srvXBA+pIylvZ7FDs5bs="
+        },
+        {
+          "Name": "label",
+          "Value": "app.css"
+        }
+      ]
+    },
+    {
+      "Route": "app.ralji6k8kb.css.gz",
+      "AssetFile": "app.css.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1908"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"l85R7YE1aiJvisss5IjTun85m3s1Q4JHRsgz2q7Iy5g=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 Oct 2026 01:41:47 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ralji6k8kb"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-l85R7YE1aiJvisss5IjTun85m3s1Q4JHRsgz2q7Iy5g="
+        },
+        {
+          "Name": "label",
+          "Value": "app.css.gz"
+        }
+      ]
+    }
+  ]
+}

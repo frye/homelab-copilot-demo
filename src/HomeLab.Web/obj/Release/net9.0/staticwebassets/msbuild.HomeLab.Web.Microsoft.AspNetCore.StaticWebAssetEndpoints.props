@@ -1,0 +1,28 @@
+﻿<Project>
+  <ItemGroup>
+    <StaticWebAssetEndpoint Include="_content/HomeLab.Web/app.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\app.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-baMVtmB5dPfjYHgjCPXtuN\u002BsrvXBA\u002BpIylvZ7FDs5bs="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"5678"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022baMVtmB5dPfjYHgjCPXtuN\u002BsrvXBA\u002BpIylvZ7FDs5bs=\u0022"},{"Name":"Last-Modified","Value":"Thu, 15 Oct 2026 01:41:47 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/HomeLab.Web/app.ralji6k8kb.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\app.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"ralji6k8kb"},{"Name":"integrity","Value":"sha256-baMVtmB5dPfjYHgjCPXtuN\u002BsrvXBA\u002BpIylvZ7FDs5bs="},{"Name":"label","Value":"_content/HomeLab.Web/app.css"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"5678"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022baMVtmB5dPfjYHgjCPXtuN\u002BsrvXBA\u002BpIylvZ7FDs5bs=\u0022"},{"Name":"Last-Modified","Value":"Thu, 15 Oct 2026 01:41:47 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/HomeLab.Web/HomeLab.Web.bundle.scp.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\HomeLab.Web.ga6q7r1atc.bundle.scp.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-qBogr4vJHVmDDoAn\u002BzDnKYcI9ERpSHaofSZXDwhEt2E="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"541"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022qBogr4vJHVmDDoAn\u002BzDnKYcI9ERpSHaofSZXDwhEt2E=\u0022"},{"Name":"Last-Modified","Value":"Thu, 15 Oct 2026 01:43:14 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/HomeLab.Web/HomeLab.Web.ga6q7r1atc.bundle.scp.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\HomeLab.Web.ga6q7r1atc.bundle.scp.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"ga6q7r1atc"},{"Name":"integrity","Value":"sha256-qBogr4vJHVmDDoAn\u002BzDnKYcI9ERpSHaofSZXDwhEt2E="},{"Name":"label","Value":"_content/HomeLab.Web/HomeLab.Web.bundle.scp.css"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"541"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022qBogr4vJHVmDDoAn\u002BzDnKYcI9ERpSHaofSZXDwhEt2E=\u0022"},{"Name":"Last-Modified","Value":"Thu, 15 Oct 2026 01:43:14 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+  </ItemGroup>
+</Project>

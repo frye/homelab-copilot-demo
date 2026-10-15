@@ -1,0 +1,68 @@
+@page "/"
+@rendermode InteractiveServer
+@using HomeLab.Web.Components.Layout
+
+<PageTitle>Labwatch — Home lab</PageTitle>
+
+<div class="dashboard">
+    <header class="hero">
+        <div>
+            <p class="eyebrow">PERSONAL INFRASTRUCTURE / ALL SYSTEMS</p>
+            <h1>Your lab, <span>at a glance.</span></h1>
+            <p class="subhead">A quiet look at the systems humming behind the scenes.</p>
+        </div>
+        <div class="clock"><span class="pulse"></span> LIVE SIMULATION <b>@DateTime.Now.ToString("h:mm tt")</b></div>
+    </header>
+
+    <section class="stats">
+        <article><span>DEVICES ONLINE</span><strong>04 <small>/ 04</small></strong><em>All reporting normally</em></article>
+        <article><span>AVERAGE RACK TEMP</span><strong>28.4<small>°C</small></strong><em class="warm">↑ 0.5° over the last hour</em></article>
+        <article><span>AUTOMATIONS</span><strong>02 <small>active</small></strong><em>Last preview just now</em></article>
+    </section>
+
+    <section class="section-heading"><div><p class="eyebrow">THE HARDWARE</p><h2>Devices</h2></div><span>4 devices · updated seconds ago</span></section>
+    <section class="device-grid">
+        <article class="device-card featured">
+            <div class="card-top"><div class="device-icon">⌁</div><span class="badge"><i></i> HEALTHY</span></div>
+            <h3>Rack temperature</h3><p>Temperature sensor · Office rack</p>
+            <div class="reading"><strong>28.4°</strong><span>C</span><small>+0.5° today</small></div>
+            <div class="sparkline"><span style="--h:28%"></span><span style="--h:40%"></span><span style="--h:34%"></span><span style="--h:52%"></span><span style="--h:46%"></span><span style="--h:63%"></span><span style="--h:58%"></span><span style="--h:78%"></span><span style="--h:70%"></span><span style="--h:92%"></span><span style="--h:82%"></span><span style="--h:100%"></span></div>
+            <div class="card-foot"><span>LAST HOUR</span><span>JUST NOW</span></div>
+        </article>
+        <article class="device-card">
+            <div class="card-top"><div class="device-icon blue">◉</div><span class="badge"><i></i> HEALTHY</span></div>
+            <h3>Air quality</h3><p>CO₂ sensor · Workshop</p>
+            <div class="reading"><strong>812</strong><span>ppm</span><small class="good">Good range</small></div>
+            <div class="meter"><span style="width:42%"></span></div><div class="card-foot"><span>CO₂ LEVEL</span><span>812 / 2000 PPM</span></div>
+        </article>
+        <article class="device-card">
+            <div class="card-top"><div class="device-icon violet">▧</div><span class="badge idle">IDLE</span></div>
+            <h3>Workshop printer</h3><p>3D printer · Workshop</p>
+            <div class="reading"><strong>Idle</strong><span></span><small>12 min since last job</small></div>
+            <div class="printer-state"><span>Last print</span><b>Desk organizer · completed</b></div>
+        </article>
+        <article class="device-card">
+            <div class="card-top"><div class="device-icon amber">ϟ</div><span class="badge"><i></i> ON</span></div>
+            <h3>Printer power</h3><p>Smart plug · Workshop</p>
+            <div class="reading"><strong>3.2</strong><span>W</span><small>Standby draw</small></div>
+            <div class="meter power"><span style="width:8%"></span></div><div class="card-foot"><span>LIVE POWER</span><span>3.2 W</span></div>
+        </article>
+    </section>
+
+    <section class="section-heading automation-heading"><div><p class="eyebrow">LET THE LAB TAKE CARE OF ITSELF</p><h2>Automations</h2></div><span>Actions are simulated · nothing controls real hardware</span></section>
+    <section class="automation-grid">
+        <article class="automation-card"><div class="automation-title"><div><span class="automation-icon">⌁</span><div><h3>Cool the rack</h3><p>Temperature guard</p></div></div><span class="switch">ON</span></div><div class="rule"><span>WHEN</span> Rack temperature reaches <b>28 °C</b></div><div class="rule"><span>THEN</span> Turn on ventilation fan</div><button @onclick='() => Preview("Cool the rack")'>Preview action <span>↗</span></button></article>
+        <article class="automation-card"><div class="automation-title"><div><span class="automation-icon plug">ϟ</span><div><h3>Power down idle printer</h3><p>Energy saver</p></div></div><span class="switch">ON</span></div><div class="rule"><span>WHEN</span> Printer is idle for <b>30 minutes</b></div><div class="rule"><span>THEN</span> Switch off Printer power</div><button @onclick='() => Preview("Power down idle printer")'>Preview action <span>↗</span></button></article>
+    </section>
+    @if (!string.IsNullOrWhiteSpace(_preview))
+    {
+        <div class="notice" role="status"><strong>Simulation preview</strong> @_preview — no hardware was contacted.</div>
+    }
+    <footer>LABWATCH <span>·</span> A SMALL WINDOW INTO YOUR HOME LAB <span class="right">BUILT FOR THE CURIOUS</span></footer>
+</div>
+
+@code {
+    private string? _preview;
+
+    private void Preview(string automation) => _preview = $"{automation}: simulated action queued.";
+}

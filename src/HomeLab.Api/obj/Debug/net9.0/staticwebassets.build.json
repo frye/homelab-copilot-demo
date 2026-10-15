@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "avCOqviWqb2OYCh1fAeOc5/iRRslJ8U8h4Rmi1sPcGs=",
+  "Source": "HomeLab.Api",
+  "BasePath": "_content/HomeLab.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

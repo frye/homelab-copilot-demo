@@ -1,0 +1,7 @@
+/tmp/homelab-web-publish/HomeLab.Web
+/tmp/homelab-web-publish/appsettings.Development.json
+/tmp/homelab-web-publish/appsettings.json
+/tmp/homelab-web-publish/HomeLab.Web.dll
+/tmp/homelab-web-publish/HomeLab.Web.deps.json
+/tmp/homelab-web-publish/HomeLab.Web.runtimeconfig.json
+/tmp/homelab-web-publish/HomeLab.Web.pdb

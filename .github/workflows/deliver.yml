@@ -1,0 +1,24 @@
+name: Build demo artifacts
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - run: dotnet publish src/HomeLab.Api/HomeLab.Api.csproj --configuration Release --output artifacts/api
+      - run: dotnet publish src/HomeLab.Web/HomeLab.Web.csproj --configuration Release --output artifacts/web
+      - uses: actions/upload-artifact@v4
+        with:
+          name: homelab-demo
+          path: artifacts/

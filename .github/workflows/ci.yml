@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - run: dotnet restore HomeLab.sln
+      - run: dotnet build HomeLab.sln --no-restore --configuration Release
+      - run: dotnet test HomeLab.sln --no-build --configuration Release --logger "trx;LogFileName=tests.trx"

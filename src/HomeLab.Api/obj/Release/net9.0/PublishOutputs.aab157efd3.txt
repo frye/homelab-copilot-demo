@@ -1,0 +1,9 @@
+/tmp/homelab-api-publish/HomeLab.Api
+/tmp/homelab-api-publish/appsettings.Development.json
+/tmp/homelab-api-publish/appsettings.json
+/tmp/homelab-api-publish/HomeLab.Api.dll
+/tmp/homelab-api-publish/HomeLab.Api.deps.json
+/tmp/homelab-api-publish/HomeLab.Api.runtimeconfig.json
+/tmp/homelab-api-publish/HomeLab.Api.pdb
+/tmp/homelab-api-publish/Microsoft.AspNetCore.OpenApi.dll
+/tmp/homelab-api-publish/Microsoft.OpenApi.dll
