@@ -1,5 +1,5 @@
 ## Goal
-Show what an automation would do before any action is simulated. (Research → Plan → Autopilot exercise.)
+Show what an automation would do before any action is simulated. (Plan → Autopilot exercise.)
 
 ## Scope
 - Add a dry-run preview presenting the trigger, proposed action, and simulated outcome.

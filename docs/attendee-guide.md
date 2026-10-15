@@ -1,6 +1,6 @@
 # Attendee guide: A Day in the Life of a Developer with Copilot
 
-You'll work in your own copy of **Labwatch**, a simulated home-lab dashboard (ASP.NET Core API + Blazor web UI). Over 90 minutes you'll review and fix a red pull request, hand an issue to the Cloud agent, use Copilot CLI, run Research → Plan → Autopilot, and finish with Agent Merge. Nothing here controls real hardware.
+You'll work in your own copy of **Labwatch**, a simulated home-lab dashboard (ASP.NET Core API + Blazor web UI). Over 90 minutes you'll review and fix a red pull request, hand an issue to the Cloud agent, use Copilot CLI, plan from an issue and build it with Autopilot, and finish with Agent Merge. Nothing here controls real hardware.
 
 ## Before the session (15 minutes)
 
@@ -71,7 +71,7 @@ On your PR, open **Reviewers** and request **Copilot**. While it runs, open the 
 
 Open the **Add device telemetry history** issue and assign it to Copilot (or start it from the Copilot app as a cloud session). Don't wait for it; it runs while you continue.
 
-**Done when:** the agent has started and opened a draft PR. Check back after module 6.
+**Done when:** the agent has started and opened a draft PR. Check back after module 5.
 
 ### 4. Copilot CLI: fix the red PR (35–45 min)
 
@@ -93,31 +93,25 @@ git push
 
 **Done when:** the test passes locally and the PR's check turns green.
 
-### 5. Research (45–55 min)
+### 5. Plan from an issue (45–65 min)
 
-Start a session for the **Add automation dry-run explanations** issue in the Copilot app. Ask for research only:
+In the Copilot app, start a session from the **Add automation dry-run explanations** issue. Copilot starts planning automatically: it reads the code, asks a few clarifying questions, and writes a plan with the files and tests it intends to change.
 
-> Find how this repo models device readings and automation previews. Cite the files and identify relevant test patterns; do not change files.
+Answer its questions, then read the plan. Push back with **Suggest changes** if it touches telemetry-history files, since the Cloud agent owns those. Don't approve it yet.
 
-**Done when:** you have a short, cited brief, and no files have changed.
-
-### 6. Plan (55–65 min)
-
-Switch to Plan mode:
+Prefer to drive it yourself? Stop the initial planning run and prompt it manually:
 
 > Plan an automation dry-run explanation with trigger, proposed action, and explicit preview-only semantics. List files and acceptance tests before implementation.
 
-Read the plan. Push back if it touches telemetry-history files, since the Cloud agent owns those. Approve it when it's tight.
+**Done when:** the plan names its files and tests, stays out of telemetry-history code, and no files have changed.
 
-**Done when:** you've approved a plan that names its files and tests.
-
-### 7. Autopilot (65–78 min)
+### 6. Autopilot (65–78 min)
 
 Approve the plan with **Autopilot**. When it finishes, review the diff and run `dotnet test HomeLab.sln`.
 
 **Done when:** tests pass and the preview explains its trigger and action in plain language.
 
-### 8. Agent Merge (78–90 min)
+### 7. Agent Merge (78–90 min)
 
 Back on the stale-telemetry PR, turn on **Agent Merge** from the Copilot app. Don't enable automatic merging. Watch it reply to and resolve the review thread from module 2 and confirm the checks are green.
 
