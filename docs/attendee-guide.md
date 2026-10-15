@@ -6,10 +6,11 @@ You'll work in your own copy of **Labwatch**, a simulated home-lab dashboard (AS
 
 ### You need
 
+Follow [prerequisites and installation](prerequisites.md) for Windows, macOS, or Linux before setting up your copy. It covers .NET 9, Git, GitHub CLI, Copilot clients, sign-in, and optional launcher dependencies.
+
 - A GitHub account with a Copilot plan that includes Code Review, the Cloud agent, and Agent Merge.
 - VS Code with GitHub Copilot enabled and signed in. Confirm Copilot Chat and inline chat are available.
 - The GitHub Copilot app and Copilot CLI (`copilot`), both signed in, for the later modules.
-- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0), `git`, and the [GitHub CLI](https://cli.github.com/) (`gh auth login`).
 - On Windows, run the setup script from Git Bash or WSL.
 
 ### Set up your copy
