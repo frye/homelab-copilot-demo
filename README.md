@@ -2,6 +2,14 @@
 
 A small, simulated home-lab dashboard for a 90-minute “A Day in the Life of a Developer with Copilot” session. It includes an ASP.NET Core API, a Blazor Server web UI, seeded sensor data, and safe automation previews. **No endpoint controls physical hardware.**
 
+## Prerequisites
+
+- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0) and Git
+- [GitHub CLI](https://cli.github.com/) (`gh`) and a Copilot client, such as Copilot CLI (`copilot`), for the workshop
+- Bash, Python 3 (`python3`), and `curl` for the optional `scripts/run.sh` launcher
+
+See [prerequisites and installation](docs/prerequisites.md) for install steps on Windows, macOS, and Linux, sign-in, and verification.
+
 ## Run locally
 
 Requires the .NET 9 SDK.
