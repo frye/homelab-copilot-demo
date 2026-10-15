@@ -8,10 +8,10 @@ Install and verify these tools before following the [attendee guide](attendee-gu
 |---|---|
 | Build and run the dashboard locally | Git, the **.NET 9 SDK**, a terminal, and a browser |
 | Seed the workshop repository | Bash, GitHub CLI (`gh`), a signed-in GitHub account with permission to push branches and create issues/PRs, and a configured Git commit identity |
-| Follow the Copilot exercises | Copilot access and an available client: the GitHub Copilot app, Copilot CLI (`copilot`), or Copilot in an IDE |
+| Follow the Copilot exercises | Copilot access, VS Code with GitHub Copilot, Copilot CLI (`copilot`), and the GitHub Copilot app |
 | Use the optional `scripts/run.sh` launcher | Bash, **Python 3 available as `python3`**, and `curl`, in addition to .NET |
 
-Install the SDK, not just a runtime: it includes the build tools and the .NET/ASP.NET Core 9 runtimes needed by the `net9.0` projects. A newer SDK alone may not include those runtimes. No separate Blazor workload, database server, Docker, Node.js, or IDE is required for this repository.
+Install the SDK, not just a runtime: it includes the build tools and the .NET/ASP.NET Core 9 runtimes needed by the `net9.0` projects. A newer SDK alone may not include those runtimes. No separate Blazor workload, database server, Docker, or Node.js is required. VS Code is used in the opening workshop module, but is not needed to build or run the dashboard.
 
 ### Account and feature access
 
@@ -101,7 +101,7 @@ copilot
 
 Follow its sign-in prompts; enter `/login` if needed. Confirm that a simple prompt receives a response. GitHub CLI authentication and Copilot authentication are separate checks; a successful `gh auth status` alone does not establish Copilot access. See the [Copilot CLI setup guide](https://docs.github.com/en/copilot/how-tos/copilot-cli/set-up-copilot-cli/install-copilot-cli).
 
-If you use an IDE instead, install its supported GitHub Copilot integration using the [official IDE setup instructions](https://docs.github.com/en/copilot/how-tos/set-up/install-copilot-extension), sign in, and confirm chat works. An IDE is optional; use the available client's equivalent planning and coding controls rather than expecting the desktop app's exact UI.
+For the opening workshop module, install [VS Code](https://code.visualstudio.com/download) for your OS and its GitHub Copilot integration using the [official IDE setup instructions](https://docs.github.com/en/copilot/how-tos/set-up/install-copilot-extension). Sign in and confirm both Copilot Chat and inline chat work. If VS Code is unavailable, use another available client's equivalent controls for applicable tasks rather than expecting the same UI.
 
 ## Authenticate GitHub CLI and configure Git
 
