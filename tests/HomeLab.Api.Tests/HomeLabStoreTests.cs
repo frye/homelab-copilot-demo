@@ -24,4 +24,15 @@ public sealed class HomeLabStoreTests
         Assert.Contains("Preview", automation.Action);
         Assert.True(automation.Enabled);
     }
+
+    [Fact]
+    public void AutomationEvaluator_SuppressesReadingAtFiveMinuteBoundary()
+    {
+        var now = new DateTimeOffset(2026, 10, 14, 12, 0, 0, TimeSpan.Zero);
+        var recordedAt = now.AddMinutes(-5);
+
+        var decision = AutomationFreshness.Evaluate(recordedAt, now);
+
+        Assert.Equal(AutomationDecision.Suppressed, decision);
+    }
 }
