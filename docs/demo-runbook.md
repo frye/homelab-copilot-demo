@@ -146,14 +146,26 @@ Explain why
 fails, make the smallest fix, and run only that test.
 ```
 
-3. Confirm the one-character fix (`>` becomes `>=`), then verify and push:
+3. Confirm the one-character fix (`>` becomes `>=`), then run each command in turn.
+
+Verify the fix:
 
 ```sh
 dotnet test tests/HomeLab.Api.Tests \
   --filter \
   FullyQualifiedName~SuppressesReadingAtFiveMinuteBoundary
+```
+
+Commit:
+
+```sh
 git commit -am \
   "Treat readings exactly five minutes old as stale"
+```
+
+Push:
+
+```sh
 git push
 ```
 
