@@ -657,11 +657,11 @@ dotnet test HomeLab.sln
 
 1. Open the stale-telemetry PR in the Copilot app.
 2. Turn on **Agent Merge** with address reviews, fix CI, and resolve conflicts enabled. Leave **merge PR** off.
-3. Watch it reply to and resolve the review thread from the Code Review step. Inspect the fix before accepting the resolution. Confirm the latest commit passes the required CI and security gates configured in preflight.
-4. Confirm Copilot's review has finished, all review threads are resolved, and no required check or security analysis is pending or failing. Merge manually without bypassing the rules (the attendee's call), then show the `homelab-demo` artifact on `main`.
+3. Watch it reply to and resolve the review thread from the Code Review step. Inspect the fix before accepting the resolution. Confirm the latest commit passes required CI and any optional security gates enabled during preflight.
+4. Confirm Copilot's review has finished, all review threads are resolved, and no required check is pending or failing. If optional GHAS merge gates were enabled, confirm those pass too. Merge manually without bypassing the rules (the attendee's call), then show the `homelab-demo` artifact on `main`.
 
 </td>
-<td>Copilot's review is complete, all review threads are resolved, required CI and security gates pass, and the PR shows as ready to merge without bypass. After merge, <code>main</code> publishes artifacts.</td>
+<td>Copilot's review is complete, all review threads are resolved, required CI (and any optional security gates enabled) passes, and the PR shows as ready to merge without bypass. After merge, <code>main</code> publishes artifacts.</td>
 </tr>
 
 </tbody>
@@ -681,37 +681,27 @@ Before the session:
 - Optionally rehearse the five parallel sessions and push their results to `reference/*` branches as fallbacks. Each one starts from `main`, so they can be rehearsed in any order.
 - Agent Merge is not pre-enabled.
 
-### Configure branch protection and security merge gates
+### Configure branch protection (GHAS is optional)
 
 Use a **branch ruleset** to protect `main`. It combines required checks,
-review-thread resolution, and security results. These instructions change
+review-thread resolution, with optional security results. These instructions change
 GitHub settings manually; the demo scripts do not change repository access
 or protection settings.
 
 You need repository administration access and a plan that supports rulesets
-for the repository's visibility. Private repositories also need the
-appropriate GitHub Code Security/Secret Protection features enabled for
-the security gates below. Verify availability before the demo; do not
-describe an unavailable or disabled gate as enforced.
+for the repository's visibility. **The standard walkthrough requires only
+CI and review-thread resolution. Skip the optional GHAS section to avoid
+additional setup and scan waits.** If you choose to include it, private
+repositories need the appropriate GitHub Code Security/Secret Protection
+features enabled. Do not describe an unavailable or disabled gate as enforced.
 
-#### 1. Enable security scans before requiring their results
+#### 1. Confirm CI runs before requiring it
 
-1. Open the demo repository on GitHub, then **Settings > Advanced Security**
-   (under **Security and quality**; older layouts may say **Code security**).
-2. Under **Code Security**, find **CodeQL analysis**, choose **Set up >
-   Default**, confirm C# is selected, and enable CodeQL. Wait for its initial
-   analysis to succeed. Default setup runs PR analysis without adding a
-   workflow file to this repository.
-3. Enable **Secret scanning** and **Push protection** where available.
-   Push protection blocks detected secrets during a push; it is not a
-   replacement for the secret-scanning merge rule below.
-4. Open a rehearsal PR and inspect its **Checks** tab. Confirm `build-and-test`
-   from the **CI** workflow and the enabled security analyses actually run.
-   Record the exact names of any additional security checks you will require.
-   Do not require invented check names or `Build demo artifacts`, which runs
-   only after a push to `main`. This repository does not currently include a
-   dependency-review workflow; Dependabot alerts alone are not a PR status
-   check or a merge gate.
+1. Open a rehearsal PR in the demo repository and inspect its **Checks** tab.
+   Confirm `build-and-test` from the **CI** workflow actually runs.
+2. Use that exact check name when configuring the ruleset. Do not require
+   invented check names or `Build demo artifacts`, which runs only after a
+   push to `main`.
 
 #### 2. Create an enforced ruleset for `main`
 
@@ -735,22 +725,15 @@ describe an unavailable or disabled gate as enforced.
 6. Enable **Require status checks to pass**. Click **Add checks**, select the
    exact `build-and-test` check from **CI**, and choose **GitHub Actions** as
    its expected source where offered. Enable **Require branches to be up to
-   date before merging**. Add any other PR security checks verified in step
-   1 using their actual names. Checking the rule with an empty required-check
+   date before merging**. Checking the rule with an empty required-check
    list does not require CI to pass.
-7. Enable **Require code scanning results**. Under **Required tools and alert
-   thresholds**, click **Add tool**, select **CodeQL**, set **Alerts** to
-   **All**, and set **Security alerts** to **All**. This blocks merge for
-   qualifying PR findings and missing or pending required analysis, not just
-   a failed workflow run. A green analysis job alone does not mean it found
-   no vulnerabilities.
-8. Where available, enable **Require secret scanning alerts are resolved**,
-   and select all supported secret types offered for the demo. This requires
-   scanning to finish and blocks applicable open secrets introduced by the
-   PR. The feature is in preview and does not cover AI-detected secrets.
-9. Keep **Block force pushes** and **Restrict deletions** enabled, then save
+7. For the standard walkthrough, do not add new code-scanning or
+   secret-scanning requirements. If you want GHAS in the demo, follow the
+   optional section below before enabling those gates. Preserve any existing
+   organizational security requirements; do not bypass or disable them.
+8. Keep **Block force pushes** and **Restrict deletions** enabled, then save
    the ruleset. Reopen it to confirm it is **Active**, targets `main`, and
-   lists `build-and-test` and the intended security rules.
+   lists `build-and-test` and requires conversation resolution.
 
 #### 3. Verify the gates and Copilot review before the live merge
 
@@ -760,9 +743,9 @@ describe an unavailable or disabled gate as enforced.
    review to finish. Leave the boundary-bug thread unresolved to demonstrate
    the conversation-resolution gate.
 3. After fixing the bug, update the feature branch with the latest `main`
-   if GitHub requests it, and wait for CI and security analysis on the new
-   commit. Confirm all required checks pass, CodeQL merge protection passes,
-   and the secret-scanning gate passes where enabled.
+   if GitHub requests it, and wait for CI on the new commit. Confirm all
+   required checks pass. If optional security gates were enabled, wait for
+   their analysis and confirm they pass too.
 4. Inspect the replies and fixes for every Copilot thread before resolving
    it. Re-request review after substantial changes. The merge box must show
    no unresolved conversations or remaining approval requirements.
@@ -778,10 +761,43 @@ The presenter must verify review completion and address those comments before
 merging. Required status checks may also accept neutral/skipped conclusions;
 for this demo, confirm the build and test job actually ran successfully.
 
-If a required security feature is unavailable on an attendee's account,
-use a prepared repository where the complete gates are supported. Otherwise
-explicitly show a limited demo and do not claim security merge protection.
-Never introduce a real secret or vulnerability just to test a gate.
+#### Optional: Add GHAS security scans and merge gates
+
+This is an optional preflight extension, not a prerequisite for the standard
+walkthrough. Complete it before presenting if you want to demonstrate security
+merge protection; scanning adds extra waits on PR updates.
+
+1. Open **Settings > Advanced Security** (under **Security and quality**;
+   older layouts may say **Code security**). Verify feature availability.
+   If unavailable, skip this extension and do not claim it is enforced.
+2. Under **Code Security**, find **CodeQL analysis**, choose **Set up >
+   Default**, confirm C# is selected, and enable CodeQL. Wait for its initial
+   analysis to succeed. Default setup runs PR analysis without adding a
+   workflow file to this repository.
+3. Enable **Secret scanning** and **Push protection** where available.
+   Push protection blocks detected secrets during a push; it is not a
+   replacement for the secret-scanning merge rule below.
+4. Open a rehearsal PR and confirm the security analyses run. Record the
+   exact names of any additional PR security checks you intend to require.
+   This repository has no dependency-review workflow; Dependabot alerts
+   alone are not a PR status check or a merge gate.
+5. Edit **Demo merge gates** in **Settings > Rules > Rulesets**. Enable
+   **Require code scanning results**. Under **Required tools and alert
+   thresholds**, click **Add tool**, select **CodeQL**, set **Alerts** to
+   **All**, and set **Security alerts** to **All**. This blocks merge for
+   qualifying PR findings and missing or pending required analysis, not just
+   a failed workflow run. A green analysis job alone does not mean it found
+   no vulnerabilities.
+6. Where available, enable **Require secret scanning alerts are resolved**,
+   and select all supported secret types offered for the demo. This requires
+   scanning to finish and blocks applicable open secrets introduced by the
+   PR. The feature is in preview and does not cover AI-detected secrets.
+7. Add any additional security checks verified in step 4 to the required
+   status-check list using their actual names, then save the active ruleset.
+8. Confirm the rehearsal PR satisfies all enabled security gates before
+   merging. Once enabled, these gates are mandatory for merge, even though
+   adding them to the demo was optional. Do not bypass them to save time.
+   Never introduce a real secret or vulnerability just to test a gate.
 
 References: [Ruleset rules](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets),
 [CodeQL default setup](https://docs.github.com/en/code-security/how-tos/find-and-fix-code-vulnerabilities/configure-code-scanning/configure-code-scanning),
