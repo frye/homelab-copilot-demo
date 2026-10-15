@@ -17,4 +17,6 @@ Open <http://localhost:5072>. The API exposes `/api/devices`, `/api/readings`, `
 dotnet test HomeLab.sln
 ```
 
-See [the demo runbook](docs/demo-runbook.md) for the 90-minute talk track, GitHub setup, and reset procedure.
+**Following along?** Start with [the attendee guide](docs/attendee-guide.md): create your own repo from this template and run `scripts/setup-demo.sh`.
+
+Presenters: see [the demo runbook](docs/demo-runbook.md) for the 90-minute talk track, setup, and reset procedure.

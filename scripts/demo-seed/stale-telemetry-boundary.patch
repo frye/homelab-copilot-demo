@@ -1,0 +1,44 @@
+diff --git a/src/HomeLab.Api/AutomationFreshness.cs b/src/HomeLab.Api/AutomationFreshness.cs
+new file mode 100644
+index 0000000..09ce4e0
+--- /dev/null
++++ b/src/HomeLab.Api/AutomationFreshness.cs
+@@ -0,0 +1,18 @@
++namespace HomeLab.Api;
++
++public enum AutomationDecision
++{
++    Triggered,
++    Suppressed
++}
++
++public static class AutomationFreshness
++{
++    public static AutomationDecision Evaluate(DateTimeOffset recordedAt, DateTimeOffset now)
++    {
++        var age = now - recordedAt;
++        return age > TimeSpan.FromMinutes(5)
++            ? AutomationDecision.Suppressed
++            : AutomationDecision.Triggered;
++    }
++}
+diff --git a/tests/HomeLab.Api.Tests/HomeLabStoreTests.cs b/tests/HomeLab.Api.Tests/HomeLabStoreTests.cs
+index 86de3fb..e5ea18c 100644
+--- a/tests/HomeLab.Api.Tests/HomeLabStoreTests.cs
++++ b/tests/HomeLab.Api.Tests/HomeLabStoreTests.cs
+@@ -24,4 +24,15 @@ public sealed class HomeLabStoreTests
+         Assert.Contains("Preview", automation.Action);
+         Assert.True(automation.Enabled);
+     }
++
++    [Fact]
++    public void AutomationEvaluator_SuppressesReadingAtFiveMinuteBoundary()
++    {
++        var now = new DateTimeOffset(2026, 10, 14, 12, 0, 0, TimeSpan.Zero);
++        var recordedAt = now.AddMinutes(-5);
++
++        var decision = AutomationFreshness.Evaluate(recordedAt, now);
++
++        Assert.Equal(AutomationDecision.Suppressed, decision);
++    }
+ }
