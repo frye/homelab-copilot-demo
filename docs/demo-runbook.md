@@ -12,7 +12,7 @@ Upstream: [frye/homelab-copilot-demo](https://github.com/frye/homelab-copilot-de
 |---|---|
 | PR **Guard automation runs against stale telemetry** from `demo/stale-telemetry-boundary` (intentionally red) | Code Review → CLI → Agent Merge |
 | Issue **Add device telemetry history** | Cloud agent |
-| Issue **Add automation dry-run explanations** | Research → Plan → Autopilot |
+| Issue **Add automation dry-run explanations** | Plan (auto-started from the issue) → Autopilot |
 
 The PR adds a deterministic-clock boundary test that fails when a reading exactly five minutes old is treated as fresh. Pass `--request-review` to also request a Copilot code review up front, as a presenter backup in case review is slow live.
 
@@ -174,59 +174,38 @@ git push
 </tr>
 
 <tr>
-<td><strong>45–55</strong><br>Copilot app<br><em>Research</em></td>
+<td><strong>45–65</strong><br>Copilot app<br><em>Plan from an issue</em></td>
 <td>
 
 **Features to highlight**
 
-- Starting a session from an issue (**Add automation dry-run explanations**).
-- Read-only investigation before any implementation.
-- Source-grounded answers that cite files and existing test patterns.
-- Carrying constraints, such as preview-only behavior, into the next step.
+- Starting a session from an issue (**Add automation dry-run explanations**) automatically kicks off the plan agent with the issue as context. No prompt needed.
+- Research built into planning: the agent reads the code and cites the files and test patterns it relies on before proposing changes.
+- Clarifying questions with suggested answers, asked one at a time.
+- A reviewable `plan.md` with an approach, todos, files in scope, and acceptance tests.
+- Steering the plan with feedback so it doesn't conflict with the Cloud agent's telemetry-history work.
+- The human approves the plan before any code changes.
 
 **Presenter steps**
 
-1. Start a Copilot app session for the issue **Add automation dry-run explanations**.
-2. Ask for research only:
+1. In the Copilot app, start a session from the issue **Add automation dry-run explanations**. Point out that planning starts on its own.
+2. While it works, narrate what the agent is doing: reading the automation and readings code, finding test patterns, and noting constraints from `.github/copilot-instructions.md` (previews only, no hardware).
+3. Answer its clarifying questions. Prefer the recommended choices unless you want to show steering.
+4. Open the plan and walk through it: the approach, the files in scope, the acceptance tests, and preview-only semantics in both the API and the UI.
+5. If the plan touches telemetry-history files, use **Suggest changes** to push back and ask it to stay out of them.
+6. Stop at the approval prompt. Don't approve yet.
 
-```text
-Find how this repo models device readings and automation
-previews. Cite the files and identify relevant test patterns;
-do not change files.
-```
-
-3. Point out that no files changed.
-
-</td>
-<td>A concise, cited brief exists and the working tree is clean.</td>
-</tr>
-
-<tr>
-<td><strong>55–65</strong><br>Copilot app<br><em>Plan</em></td>
-<td>
-
-**Features to highlight**
-
-- Plan mode: Copilot asks clarifying questions before writing code.
-- A reviewable plan that lists files, todos, and acceptance tests.
-- Pushing back on scope so this work doesn't conflict with the Cloud agent's telemetry-history work.
-- The human approves the plan before implementation starts.
-
-**Presenter steps**
-
-1. In the same session, switch to **Plan** mode and ask:
-
-```text
-Plan an automation dry-run explanation with trigger, proposed
-action, and explicit preview-only semantics. List files and
-acceptance tests before implementation.
-```
-
-2. Answer any clarifying questions. Push back if the plan touches telemetry-history files.
-3. Stop at the approval prompt. Don't approve yet.
+> [!TIP]
+> The automatic planning is optional. To drive it by hand, stop the initial run and prompt the session yourself, for example:
+>
+> ```text
+> Plan an automation dry-run explanation with trigger, proposed
+> action, and explicit preview-only semantics. List files and
+> acceptance tests before implementation.
+> ```
 
 </td>
-<td>The plan names its files and tests and stays out of telemetry-history code.</td>
+<td>The plan cites existing code, names its files and tests, stays out of telemetry-history code, and is waiting for approval. No files have changed.</td>
 </tr>
 
 <tr>
