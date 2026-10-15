@@ -657,11 +657,11 @@ dotnet test HomeLab.sln
 
 1. Open the stale-telemetry PR in the Copilot app.
 2. Turn on **Agent Merge** with address reviews, fix CI, and resolve conflicts enabled. Leave **merge PR** off.
-3. Watch it reply to and resolve the review thread from the Code Review step and confirm checks are green.
-4. Merge manually (the attendee's call), then show the `homelab-demo` artifact on `main`.
+3. Watch it reply to and resolve the review thread from the Code Review step. Inspect the fix before accepting the resolution. Confirm the latest commit passes the required CI and security gates configured in preflight.
+4. Confirm Copilot's review has finished, all review threads are resolved, and no required check or security analysis is pending or failing. Merge manually without bypassing the rules (the attendee's call), then show the `homelab-demo` artifact on `main`.
 
 </td>
-<td>The review thread is resolved, required checks pass, and the PR shows as ready to merge. After merge, <code>main</code> publishes artifacts.</td>
+<td>Copilot's review is complete, all review threads are resolved, required CI and security gates pass, and the PR shows as ready to merge without bypass. After merge, <code>main</code> publishes artifacts.</td>
 </tr>
 
 </tbody>
@@ -676,9 +676,116 @@ dotnet test HomeLab.sln
 Before the session:
 - Confirm attendees can see the template. A private template is only usable by people with access, so make it public or add attendees.
 - Confirm Actions run in a fresh copy, and that Code Review, Cloud agent, and Agent Merge are available on the accounts in use.
+- Configure and verify the merge gates below in each presenter/attendee repository before the walkthrough. Template copies do not inherit these settings, and `scripts/setup-demo.sh` does not configure them.
 - Do a full rehearsal in a fresh copy. Push the Cloud agent and Autopilot results to `reference/telemetry-history` and `reference/automation-dry-run` branches to use as fallbacks. These aren't pre-built.
 - Optionally rehearse the five parallel sessions and push their results to `reference/*` branches as fallbacks. Each one starts from `main`, so they can be rehearsed in any order.
 - Agent Merge is not pre-enabled.
+
+### Configure branch protection and security merge gates
+
+Use a **branch ruleset** to protect `main`. It combines required checks,
+review-thread resolution, and security results. These instructions change
+GitHub settings manually; the demo scripts do not change repository access
+or protection settings.
+
+You need repository administration access and a plan that supports rulesets
+for the repository's visibility. Private repositories also need the
+appropriate GitHub Code Security/Secret Protection features enabled for
+the security gates below. Verify availability before the demo; do not
+describe an unavailable or disabled gate as enforced.
+
+#### 1. Enable security scans before requiring their results
+
+1. Open the demo repository on GitHub, then **Settings > Advanced Security**
+   (under **Security and quality**; older layouts may say **Code security**).
+2. Under **Code Security**, find **CodeQL analysis**, choose **Set up >
+   Default**, confirm C# is selected, and enable CodeQL. Wait for its initial
+   analysis to succeed. Default setup runs PR analysis without adding a
+   workflow file to this repository.
+3. Enable **Secret scanning** and **Push protection** where available.
+   Push protection blocks detected secrets during a push; it is not a
+   replacement for the secret-scanning merge rule below.
+4. Open a rehearsal PR and inspect its **Checks** tab. Confirm `build-and-test`
+   from the **CI** workflow and the enabled security analyses actually run.
+   Record the exact names of any additional security checks you will require.
+   Do not require invented check names or `Build demo artifacts`, which runs
+   only after a push to `main`. This repository does not currently include a
+   dependency-review workflow; Dependabot alerts alone are not a PR status
+   check or a merge gate.
+
+#### 2. Create an enforced ruleset for `main`
+
+1. Go to **Settings > Rules > Rulesets > New ruleset > New branch ruleset**.
+   If an existing repository ruleset already protects `main`, edit it instead
+   and preserve its unrelated protections.
+2. Name it **Demo merge gates** and set **Enforcement status** to **Active**,
+   not **Evaluate** or **Disabled**.
+3. Leave the **Bypass list** empty. Do not add the presenter, administrators,
+   Copilot, or other automation as bypass actors.
+4. Under **Target branches**, choose **Add target > Include by pattern** and
+   enter `main`. Do not target all branches: agents need to push freely to
+   their feature branches.
+5. Enable **Require a pull request before merging**. In its options, enable
+   **Require conversation resolution before merging** so unresolved inline
+   review threads, including Copilot's, block merge. For a solo demo, leave
+   required human approvals at **0**; use **1** if a second person with write
+   access will review. If requiring approvals, also enable **Dismiss stale
+   pull request approvals when new commits are pushed**. Copilot's comment
+   review does not substitute for a required human approval.
+6. Enable **Require status checks to pass**. Click **Add checks**, select the
+   exact `build-and-test` check from **CI**, and choose **GitHub Actions** as
+   its expected source where offered. Enable **Require branches to be up to
+   date before merging**. Add any other PR security checks verified in step
+   1 using their actual names. Checking the rule with an empty required-check
+   list does not require CI to pass.
+7. Enable **Require code scanning results**. Under **Required tools and alert
+   thresholds**, click **Add tool**, select **CodeQL**, set **Alerts** to
+   **All**, and set **Security alerts** to **All**. This blocks merge for
+   qualifying PR findings and missing or pending required analysis, not just
+   a failed workflow run. A green analysis job alone does not mean it found
+   no vulnerabilities.
+8. Where available, enable **Require secret scanning alerts are resolved**,
+   and select all supported secret types offered for the demo. This requires
+   scanning to finish and blocks applicable open secrets introduced by the
+   PR. The feature is in preview and does not cover AI-detected secrets.
+9. Keep **Block force pushes** and **Restrict deletions** enabled, then save
+   the ruleset. Reopen it to confirm it is **Active**, targets `main`, and
+   lists `build-and-test` and the intended security rules.
+
+#### 3. Verify the gates and Copilot review before the live merge
+
+1. Use the intentionally red stale-telemetry PR from `scripts/setup-demo.sh`
+   to verify that failed `build-and-test` blocks merge. Do not bypass it.
+2. Request **Copilot** from the PR's **Reviewers** menu and wait for the
+   review to finish. Leave the boundary-bug thread unresolved to demonstrate
+   the conversation-resolution gate.
+3. After fixing the bug, update the feature branch with the latest `main`
+   if GitHub requests it, and wait for CI and security analysis on the new
+   commit. Confirm all required checks pass, CodeQL merge protection passes,
+   and the secret-scanning gate passes where enabled.
+4. Inspect the replies and fixes for every Copilot thread before resolving
+   it. Re-request review after substantial changes. The merge box must show
+   no unresolved conversations or remaining approval requirements.
+5. Keep Agent Merge's **merge PR** action off for this walkthrough. Enable
+   **address reviews**, **fix CI**, and **resolve conflicts** as described
+   above, then merge manually only after all gates pass. Do not use an admin
+   override or temporarily remove a required check to make the demo proceed.
+
+**Copilot review is not a green-check requirement.** Conversation resolution
+blocks existing unresolved review threads; it does not guarantee a Copilot
+review was requested or completed, and it does not gate top-level PR comments.
+The presenter must verify review completion and address those comments before
+merging. Required status checks may also accept neutral/skipped conclusions;
+for this demo, confirm the build and test job actually ran successfully.
+
+If a required security feature is unavailable on an attendee's account,
+use a prepared repository where the complete gates are supported. Otherwise
+explicitly show a limited demo and do not claim security merge protection.
+Never introduce a real secret or vulnerability just to test a gate.
+
+References: [Ruleset rules](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets),
+[CodeQL default setup](https://docs.github.com/en/code-security/how-tos/find-and-fix-code-vulnerabilities/configure-code-scanning/configure-code-scanning),
+and [Code scanning merge protection](https://docs.github.com/en/code-security/how-tos/find-and-fix-code-vulnerabilities/manage-your-configuration/set-merge-protection).
 
 If Cloud agent is unavailable or still running at its checkpoint, show the rehearsal reference branch and leave its issue open. If Code Review is unavailable, use Copilot CLI to inspect the same diff/test; do not claim a Code Review ran. If Agent Merge is unavailable, walk through the checks and thread manually and show readiness without claiming automation. Use the rehearsal Autopilot branch if its task is still running.
 
