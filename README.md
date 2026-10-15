@@ -11,6 +11,8 @@ dotnet run --project src/HomeLab.Api --urls http://localhost:5071
 dotnet run --project src/HomeLab.Web --urls http://localhost:5072
 ```
 
+Or start both at once with `scripts/run.sh` (requires Python 3 for port checks; Ctrl+C stops both; override ports with `API_PORT`/`WEB_PORT`). Occupied ports produce an error before building or launching. Use `scripts/run.sh --auto-ports` to select two unused ports and open the printed Web URL. If either service exits, the script stops the other and returns a nonzero exit status. Port checks cannot prevent another process from taking a selected port during startup.
+
 Open <http://localhost:5072>. The API exposes `/api/devices`, `/api/readings`, `/api/automations`, and `POST /api/automations/{id}/preview`. The preview endpoint only returns a simulated result.
 
 ```sh
